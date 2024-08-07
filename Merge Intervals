@@ -1,0 +1,38 @@
+class Solution {
+    public int[][] merge(int[][] A) {
+        Arrays.sort(A, (a, b) -> Integer.compare(a[0], b[0]));
+        ArrayList<int[]> ans = new ArrayList<>();
+        int i=0;
+        int n=A.length;
+        while(i<n){
+            int S = A[i][0];
+            int E = A[i][1];
+            int j=i+1;
+            while(j<n){
+                int S1 = A[j][0];
+                int E1 = A[j][1];
+                if((S1<=E) && (E1<=E)){
+                    ++j;
+                }
+                else if(S1<=E){
+                    E=E1;
+                    ++j;
+                }
+                else{
+                    break;
+                }
+            }
+            ans.add(new int[]{S,E});
+            i=j;
+        }
+
+        int[][] ansArr = new int[ans.size()][2];
+        for (int k = 0; k < ans.size(); k++) {
+            ansArr[k] = ans.get(k);
+        }
+        return ansArr;
+    }
+}
+
+//TC: O(N Log N) as we have sorted array, it dominates O(n)
+//SC: O(N)
