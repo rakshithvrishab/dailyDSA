@@ -1,0 +1,28 @@
+
+class Solution {
+    public long countSubArrayProductLessThanK(long A[], int n, long k) {
+        if (k <= 1) return 0; // No subarray product can be less than or equal to 1
+        long L = 0;
+        long R = 0;
+        long prod = 1;
+        long totalSubArrays = 0;
+        while (R < n) {
+            // Multiply the current element to prod
+            prod *= A[(int) R];
+            
+            // While the product is not less than k, divide by the leftmost element and move left pointer
+            while (prod >= k && L <= R) {
+                prod /= A[(int) L];
+                L++;
+            }
+            
+            // All subarrays ending at R and starting from L to R have a product less than k
+            totalSubArrays += (R - L + 1);
+            
+            // Move right pointer
+            R++;
+        }
+        
+        return totalSubArrays;
+    }
+}
