@@ -1,0 +1,66 @@
+class Solve {
+    int[] findTwoElement(int[] A, int n) {
+        int allXor = 0;
+        
+        // XOR all elements in the array and all numbers from 1 to n
+        for (int x : A) {
+            allXor ^= x;
+        }
+        for (int i = 1; i <= n; i++) {
+            allXor ^= i;
+        }
+
+        // Find the rightmost set bit in allXor
+        int setPos = 0;
+        for (int i = 0; i < 31; i++) {
+            if (((allXor >> i) & 1) == 1) {
+                setPos = i;
+                break;
+            }
+        }
+
+        int set = 0, unSet = 0;
+
+        // Partition the array elements and numbers from 1 to n based on the rightmost set bit
+        for (int i : A) {
+            if (((i >> setPos) & 1) == 1) {
+                set ^= i;
+            } else {
+                unSet ^= i;
+            }
+        }
+        for (int i = 1; i <= n; i++) {
+            if (((i >> setPos) & 1) == 1) {
+                set ^= i;
+            } else {
+                unSet ^= i;
+            }
+        }
+
+        // Determine which number is the duplicate and which is the missing
+        boolean isSetPresent = false;
+        for (int i : A) {
+            if (i == set) {
+                isSetPresent = true;
+                break;
+            }
+        }
+
+        if (isSetPresent) {
+            return new int[]{set, unSet}; // set is the duplicate, unSet is the missing
+        } else {
+            return new int[]{unSet, set}; // unSet is the duplicate, set is the missing
+        }
+    }
+
+    public static void main(String[] args) {
+        Solve sol = new Solve();
+
+        // Example input
+        int[] arr = {4, 3, 2, 7, 8, 2, 1, 9, 7};
+        int n = 9;
+
+        int[] result = sol.findTwoElement(arr, n);
+        System.out.println("Duplicate: " + result[0] + ", Missing: " + result[1]);
+    }
+}
