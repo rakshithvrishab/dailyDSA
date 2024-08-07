@@ -1,0 +1,24 @@
+
+class Solution {
+    public int findDuplicate(int[] A) {
+        // Step 1: Detect cycle
+        int slow = 0;
+        int fast = 0;
+
+        // Move slow by 1 step and fast by 2 steps
+        do {
+            slow = A[slow];
+            fast = A[A[fast]];
+        } while (slow != fast);
+
+        // Step 2: Find the entrance to the cycle
+        slow = 0; // Reset slow to the start
+        while (slow != fast) {
+            slow = A[slow];
+            fast = A[fast];
+        }
+
+        return slow; // or return fast, both are the same here
+    }
+}
+
