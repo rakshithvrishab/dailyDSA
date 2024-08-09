@@ -1,0 +1,53 @@
+class Solution {
+    public static long ans = 0;
+
+    static long inversionCount(long A[], int n) {
+        ans = 0; // Initialize the count before starting
+        divide(A, 0, n - 1);
+        return ans;
+    }
+
+    public static void divide(long[] A, int L, int R) {
+        if (L < R) {
+            int mid = (L + R) / 2;
+            divide(A, L, mid);
+            divide(A, mid + 1, R);
+            merge(A, L, mid, R);
+        }
+    }
+
+    public static void merge(long[] A, int L, int m, int R) {
+        int n1 = m - L + 1;
+        int n2 = R - m;
+
+        long[] left = new long[n1];
+        long[] right = new long[n2];
+
+        // Copy data to temporary arrays
+        for (int i = 0; i < n1; i++)
+            left[i] = A[L + i];
+        for (int j = 0; j < n2; j++)
+            right[j] = A[m + 1 + j];
+
+        // Merge the temporary arrays back into A[L..R]
+        int i = 0, j = 0, k = L;
+        while (i < n1 && j < n2) {
+            if (left[i] <= right[j]) {
+                A[k++] = left[i++];
+            } else {
+                A[k++] = right[j++];
+                ans += (n1 - i); // Count inversions
+            }
+        }
+
+        // Copy the remaining elements of left[], if any
+        while (i < n1) {
+            A[k++] = left[i++];
+        }
+
+        // Copy the remaining elements of right[], if any
+        while (j < n2) {
+            A[k++] = right[j++];
+        }
+    }
+}
