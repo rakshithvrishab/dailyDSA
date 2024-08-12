@@ -56,4 +56,4 @@ class Solution {
     }
 }
 
-//TC O(N Log N) SC: O(N)
+//TC: O(N Log N) SC: O(N)
