@@ -1,0 +1,57 @@
+class Solution {
+    private int ans = 0; // Make `ans` an instance variable
+    public int reversePairs(int[] A) {
+        divide(A, 0, A.length - 1);
+        return ans;
+    }
+
+    private void divide(int[] A, int S, int E) {
+        if (S >= E) {
+            return;
+        }
+        int m = (S + E) / 2;
+        divide(A, S, m);
+        divide(A, m + 1, E);
+        merge(A, S, m, E);
+    }
+
+    private void merge(int[] A, int S, int m, int E) {
+        // Count reverse pairs
+        int j = m + 1;
+        for (int i = S; i <= m; i++) {
+            while (j <= E && A[i] > 2L * A[j]) {
+                j++;
+            }
+            ans += (j - (m + 1)); 
+// Count elements in the right subarray that satisfy the condition
+        }
+
+        // Merge sorted halves
+        int[] A1 = new int[m - S + 1];
+        int[] A2 = new int[E - m];
+        
+        for (int i = S; i <= m; i++) {
+            A1[i - S] = A[i];
+        }
+        for (int i = m + 1; i <= E; i++) {
+            A2[i - (m + 1)] = A[i];
+        }
+
+        int p1 = 0;
+        int p2 = 0;
+        int p3 = S;
+        while (p1 < A1.length && p2 < A2.length) {
+            if (A1[p1] <= A2[p2]) {
+                A[p3++] = A1[p1++];
+            } else {
+                A[p3++] = A2[p2++];
+            }
+        }
+        while (p1 < A1.length) {
+            A[p3++] = A1[p1++];
+        }
+        while (p2 < A2.length) {
+            A[p3++] = A2[p2++];
+        }
+    }
+}
