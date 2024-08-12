@@ -1,0 +1,68 @@
+import java.util.Arrays;
+
+class Solution {
+    public void setZeroes(int[][] A) {
+        if (A.length == 0 || A[0].length == 0) return;
+
+        boolean isTopRowZero = false;
+        boolean isLeftColZero = false;
+
+        // Check if the first row has any zeroes
+        for (int j = 0; j < A[0].length; j++) {
+            if (A[0][j] == 0) {
+                isTopRowZero = true;
+                break;
+            }
+        }
+
+        // Check if the first column has any zeroes
+        for (int i = 0; i < A.length; i++) {
+            if (A[i][0] == 0) {
+                isLeftColZero = true;
+                break;
+            }
+        }
+
+        // Use the first row and column to mark zeroes
+        for (int i = 1; i < A.length; i++) {
+            for (int j = 1; j < A[0].length; j++) {
+                if (A[i][j] == 0) {
+                    A[i][0] = 0;
+                    A[0][j] = 0;
+                }
+            }
+        }
+
+        // Zero out cells based on markers in the first row
+        for (int i = 1; i < A.length; i++) {
+            if (A[i][0] == 0) {
+                for (int j = 1; j < A[0].length; j++) {
+                    A[i][j] = 0;
+                }
+            }
+        }
+
+        // Zero out cells based on markers in the first column
+        for (int j = 1; j < A[0].length; j++) {
+            if (A[0][j] == 0) {
+                for (int i = 1; i < A.length; i++) {
+                    A[i][j] = 0;
+                }
+            }
+        }
+
+        // Zero out the first row if needed
+        if (isTopRowZero) {
+            Arrays.fill(A[0], 0);
+        }
+
+        // Zero out the first column if needed
+        if (isLeftColZero) {
+            for (int i = 0; i < A.length; i++) {
+                A[i][0] = 0;
+            }
+        }
+    }
+}
+//Time Complexity: O(M×N)
+//Space Complexity: O(1)
