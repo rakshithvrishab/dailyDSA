@@ -1,0 +1,32 @@
+class Solution {
+    public void rotate(int[][] A) {
+        for(int i=0;i<A.length;i++) {
+            //j=i+1 to make sure swap happens only once
+            //if swap happens twice, it will be original array again
+            for(int j=i+1;j<A[0].length;j++){ 
+                swap(i,j,A);                  
+            }
+        }
+        //reverse each array at each row
+        for(int[] x:A){
+            revArr(x);
+        }
+    }
+
+    public static void swap(int x, int y, int[][] A) {
+        int tmp = A[x][y];
+        A[x][y] = A[y][x];
+        A[y][x] = tmp;
+    }
+    public static void revArr(int[] x){
+        int s = 0;
+        int e = x.length-1;
+        while(s<=e){
+            int tmp = x[s];
+            x[s]=x[e];
+            x[e]=tmp;
+            ++s;
+            --e;
+        }
+    }
+}
