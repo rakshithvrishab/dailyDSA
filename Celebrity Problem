@@ -1,0 +1,39 @@
+class Solution {
+    public int celebrity(int A[][]) {
+        int top = 0;
+        int bot = A.length-1;       
+        while(top<bot){
+            if(A[top][bot]==1){
+                //person at top row knows someone
+                //he can not be a celebrity
+                ++top;
+            }
+            else if(A[bot][top]==1){
+                //person at bot row knows someone
+                //he can not be a celebrity
+                --bot;
+            }
+            else{
+                ++top; //both of them dont know each other
+                --bot; //both of them cant be celebrity
+            }          
+            if(top==bot){
+                for(int i=0;i<A.length;i++){
+                    if(A[top][i]==1){
+                        return -1;
+                    }
+                }
+                for(int i=0;i<A.length;i++){
+                    if(i==top) continue;
+                    if(A[i][top]==0){
+                        return -1;
+                    }
+                }
+            }
+        }
+        return top;
+    }
+}
+
+//TC:O(N)
+//SC:O(1)
