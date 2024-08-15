@@ -1,0 +1,28 @@
+class Solution {
+    public int search(int[] A, int k) {
+        int ans = 0;
+        ans = binSearch(A , k , 0 , A.length-1);
+        return ans;
+    }
+    public static int binSearch(int[] A, int k, int S, int E){
+        if(S>E){
+            return -1;
+        }
+        int mid=(S+E)/2;
+        if(k==A[mid]){
+            return mid;
+        }
+        else if(k>A[mid]){
+            return binSearch(A,k,mid+1,E);
+        }
+        else if(k<A[mid]) {
+            return binSearch(A,k,S,mid-1);
+        }
+
+        return -1;
+    }
+}
+
+//TC : O{Log N)
+//SC : O(Log N)
+
