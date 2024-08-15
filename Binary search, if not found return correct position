@@ -1,0 +1,23 @@
+class Solution {
+    public int searchInsert(int[] A, int k) {
+        // Use binary search to find the correct insertion point
+        return binSearch(A, k, 0, A.length - 1);
+    }
+
+    public static int binSearch(int[] A, int k, int S, int E) {
+        while (S <= E) {
+            int mid = (S + E) / 2;
+            if (k == A[mid]) {
+                return mid;
+            } else if (k > A[mid]) {
+                S = mid + 1;
+            } else {
+                E = mid - 1;
+            }
+        }
+        // If not found, S will be the insertion point
+        return S;
+    }
+}
+//TC :O(Log N)
+//SC :O(1)
