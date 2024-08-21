@@ -1,0 +1,15 @@
+class Solution {
+    public int findMin(int[] A) {
+        int S=0, E=A.length -1,  mid = -1;
+        while(S<=E) {
+            mid = (S+E)/2;
+            if(A[mid]>A[A.length-1])
+                S=mid+1;
+            else
+                E=mid-1;
+        }
+        return A[S];
+    }
+}
+
+// TC: O(Log N) SC: O(1) 
