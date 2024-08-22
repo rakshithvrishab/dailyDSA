@@ -1,0 +1,33 @@
+class Solution {
+    public int singleNonDuplicate(int[] A) {
+        int S = 0;
+        int E = A.length - 1;       
+        while (S < E) {
+            int mid = S + (E - S) / 2;           
+            // Check if mid is the single element
+            if (mid == 0 || mid == A.length-1) {
+                return A[mid];
+            }
+            if ((A[mid] != A[mid - 1]) && (A[mid] != A[mid + 1])) {
+                return A[mid];
+            }           
+            // Decide which side to search
+            if (mid % 2 == 0) {
+                // If mid is even, single element must be in the right half if A[mid] == A[mid + 1]
+                if (A[mid] == A[mid + 1]) {
+                    S = mid + 2; // Move to the right half
+                } else {
+                    E = mid; // Move to the left half
+                }
+            } else {
+                // If mid is odd, single element must be in the right half if A[mid] == A[mid - 1]
+                if (A[mid] == A[mid - 1]) {
+                    S = mid + 1; // Move to the right half
+                } else {
+                    E = mid; // Move to the left half
+                }
+            }
+        }       
+        return A[S];
+    }
+}
