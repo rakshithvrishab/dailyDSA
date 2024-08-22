@@ -1,0 +1,56 @@
+class Solution {
+    public boolean searchMatrix(int[][] A, int k) {
+        if(A.length==1 && A[0].length==1){
+            if(A[0][0]==k){
+                return true;
+            }
+            return false;
+        }
+        else if(A.length==1){
+            return binSearchInRow(A,0,k);
+        }
+        int row = findRow(A,k);
+        if(row==-1){
+            return false;
+        }
+        return binSearchInRow(A,row,k);
+    }
+    public static int findRow(int[][] A, int k) {
+        int S = 0;
+        int E = A.length-1;
+        while(S<=E){
+            int mid=(S+E)/2;
+
+            if(k<=A[mid][A[0].length-1] && k>=A[mid][0]){
+                return mid;
+            }
+            else if(k<A[mid][0]){
+                E=mid-1;
+            }
+            else if(k>A[mid][A[0].length-1] ){
+                S=mid+1;
+            }
+        }
+        return -1;
+    }
+    public static boolean binSearchInRow(int[][] A,int rw, int k){
+        int S=0;
+        int E=A[0].length-1;
+        while(S<=E) {
+            int mid = (S+E)/2;
+            if(A[rw][mid]==k){
+                return true;
+            }
+            else if(A[rw][mid]<k){
+                S=mid+1;
+            }
+            else if(A[rw][mid]>k){
+                E=mid-1;
+            }
+        }
+        return false;
+    }
+}
+
+//Time Complexity: O(log m + log n) 
+//Space Complexity: O(1)	
