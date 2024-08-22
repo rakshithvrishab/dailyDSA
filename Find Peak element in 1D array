@@ -1,0 +1,23 @@
+class Solution {
+    public int findPeakElement(int[] nums) {
+        int low = 0;
+        int high = nums.length - 1;
+        
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            
+            // Compare mid element with its next element
+            if (nums[mid] > nums[mid + 1]) {
+                // If the mid element is greater than the next element, peak lies on the left side (including mid)
+                high = mid;
+            } else {
+                // If the mid element is less than or equal to the next element, peak lies on the right side (excluding mid)
+                low = mid + 1;
+            }
+        }
+        
+        // When low == high, we have found a peak element
+        return low;
+    }
+}
+
