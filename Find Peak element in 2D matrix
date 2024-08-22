@@ -1,0 +1,44 @@
+class Solution {
+    public int[] findPeakGrid(int[][] mat) {
+        int S = 0;
+        int E = mat[0].length-1;
+        while(S<=E){
+            int midCol = (S+E)/2;
+            int maxEleRow = findMaxEle(mat,midCol);
+            //check all the 4 directions
+            //no need to check with up and down as we have picked
+            //max element in entire col
+            int left = -1;
+            int right = -1;
+            int val = mat[maxEleRow][midCol];
+            if(midCol>0){
+                left = mat[maxEleRow][midCol-1];
+            }
+            if(midCol<mat[0].length-1) {
+                right = mat[maxEleRow][midCol+1];
+            }
+            if(left<val && val>right){
+                return new int[]{maxEleRow, midCol};
+            }
+            else if(left>val){
+                E=midCol-1;
+            }
+            else if(right>val) {
+                S=midCol+1;
+            }
+        }
+        return new int[]{-1,-1};
+    }
+    public static int findMaxEle(int[][] A,int col){
+        int n = A.length;
+        int max = Integer.MIN_VALUE;
+        int rowIdx = -1;
+        for(int i=0;i<n;i++) {
+            if(A[i][col]>max){
+                max = A[i][col];
+                rowIdx=i;
+            }
+        }
+        return rowIdx;
+    }
+}
