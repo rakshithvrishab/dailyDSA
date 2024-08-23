@@ -1,0 +1,39 @@
+class Solution {
+    public int shipWithinDays(int[] weights, int days) {
+        int maxWeight = Integer.MIN_VALUE;
+        int sumWeight = 0;
+        for(int x:weights){
+            sumWeight+=x;
+            maxWeight=Math.max(maxWeight,x);
+        }
+        int L = maxWeight;
+        int R = sumWeight;
+        while(L<=R) {
+            int mid=(L+R)/2;
+            if(checkPossibleDays(weights,mid,days)){
+                R=mid-1;
+            }
+            else{
+                L=mid+1;
+            }
+        }
+        return L;
+    }
+
+    public static boolean checkPossibleDays(int[] W,int cap,int days){
+        int cnt = 1; // Start with the first day
+        int load = 0;
+        for (int x : W) {
+            if (load + x > cap) {
+                cnt++; // Need a new day
+                load = x; // Start new day with the current weight
+            } else {
+                load += x; // Continue adding to the current day's load
+            }
+        }
+        return cnt <= days; // Check if days are within the limit
+    }
+}
+
+//TC: O(n * log SumOfArray)
+//SC: O(1)
