@@ -1,0 +1,20 @@
+class Solution {
+    public boolean rotateString(String s1, String s2) {
+        if(s1.length()!=s2.length()) return false;
+        if(s1.equals(s2)) return true;
+
+        int n=s1.length();
+        StringBuilder sb = new StringBuilder(s1);
+        for(int i=0;i<=n;i++) {
+            char c = sb.charAt(0);
+            sb.deleteCharAt(0);
+            sb.append(c);
+
+            if(sb.toString().equals(s2)){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
