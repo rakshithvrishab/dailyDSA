@@ -1,0 +1,27 @@
+class Solution {
+    public DLLNode reverseDLL(DLLNode head) {
+        DLLNode cur = head;
+        DLLNode pre = cur.prev;
+        DLLNode nxt = cur.next;
+        
+        while(nxt!=null) {
+            cur.next=null;
+            nxt.prev=null;
+            
+      cur.next=pre;
+            pre=cur;
+            cur=nxt;
+            nxt=nxt.next;
+        }
+        cur.next=pre; 
+        
+        DLLNode start = cur;
+        DLLNode pointer = cur.next;
+        while(pointer!=null){
+            pointer.prev=cur;
+            cur=pointer;    
+            pointer=pointer.next;
+        }
+        return start;
+    }
+}
