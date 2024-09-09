@@ -1,0 +1,29 @@
+class GfG {
+    public Stack<Integer> sort(Stack<Integer> s) {
+        if(s.size()==1) {
+            return s;
+        }
+        int top = s.pop();
+        sort(s);
+        
+        insertEle(s,top);
+        
+        return s;
+    }
+    
+    public static void insertEle(Stack<Integer> s,int ele) {
+        //Base case
+        if(s.size()==0 || s.peek()<=ele){
+            s.push(ele);
+            return;
+        }
+        //incase if top os stk is > ele which needs to inserted
+        //then take out the top recursively until
+        //we find the top which < than ele
+        int curStateEle = s.pop();
+        
+        insertEle(s,ele);
+        s.push(curStateEle);
+    }
+}
+
