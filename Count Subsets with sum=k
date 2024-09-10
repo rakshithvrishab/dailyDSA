@@ -1,0 +1,28 @@
+class Solution {
+    static int count = 0;
+    static int mod = 1000000007;
+
+    public int perfectSum(int[] arr, int n, int sum) {
+        count = 0;
+        backtrack(arr, n, sum, 0, 0);
+        return count;
+    }
+
+    private void backtrack(int[] arr, int n, int target, int currentSum, int index) {
+        // Base case: if we've used all elements
+        if (index == n) {
+            if (currentSum == target) {
+                count = (count + 1) % mod;
+            }
+            return;
+        }
+
+        // Recursive case: exclude the current element
+        backtrack(arr, n, target, currentSum, index + 1);
+
+        // Recursive case: include the current element (only if it does not exceed the target)
+        if (currentSum + arr[index] <= target) {
+            backtrack(arr, n, target, currentSum + arr[index], index + 1);
+        }
+    }
+}
