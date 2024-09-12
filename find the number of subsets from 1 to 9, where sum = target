@@ -1,0 +1,28 @@
+class Solution {
+    public List<List<Integer>> combinationSum3(int len, int tar) {
+        List<List<Integer>> ans = new ArrayList<>();
+        f(len,tar,ans,1,new ArrayList<>());
+        return ans;
+    }
+
+    public static void f(int len,int tar,List<List<Integer>> ans,int start,List<Integer> tmp ) {
+        //base case
+        if(tmp.size()==len){
+            if(tar==0) {
+                ans.add(new ArrayList<>(tmp));
+            }
+            return;
+        }
+
+        //main logic
+        for(int i=start;i<=9;i++) {
+            
+            if(i>tar) break;
+
+            tmp.add(i);
+            f(len,tar-i,ans,i+1,tmp);
+            tmp.remove(tmp.size()-1);
+        }
+    }
+}
+
