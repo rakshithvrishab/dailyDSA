@@ -1,0 +1,40 @@
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        int row = board.length;
+        int col = board[0].length;
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (f(board, word, 0, i, j)) { // Pass i and j as starting points
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean f(char[][] mat, String wrd, int idx, int r, int c) {
+        // Base Case: Check boundaries and character match
+        if (idx == wrd.length()) {
+            return true; // Found the word
+        }
+        if (c < 0 || c >= mat[0].length || r < 0 || r >= mat.length || mat[r][c] != wrd.charAt(idx)) {
+            return false; // Out of bounds or character mismatch
+        }
+
+        // Mark the cell as visited
+        char tmp = mat[r][c];
+        mat[r][c] = '*'; // Use a special character to mark it as visited
+
+        // Explore all four directions
+        boolean found = f(mat, wrd, idx + 1, r, c - 1) || // left
+                        f(mat, wrd, idx + 1, r - 1, c) || // up
+                        f(mat, wrd, idx + 1, r, c + 1) || // right
+                        f(mat, wrd, idx + 1, r + 1, c);   // down
+
+        // Restore the cell's original value
+        mat[r][c] = tmp;
+
+        return found;
+    }
+  
