@@ -1,0 +1,41 @@
+class Solution {
+    public List<List<String>> partition(String s) {
+        List<List<String>> ans = new ArrayList<>();
+       
+        List<String> cur = new ArrayList<>();
+
+        findAllPalin(s,ans,cur,0);
+
+        return ans;
+    }
+
+    public static void findAllPalin(String S,List<List<String>> ans,List<String> cur, int start) {
+        //Base Case
+        if(start==S.length()){
+            ans.add(new ArrayList<>(cur));
+            return;
+        }
+        //Main Logic
+        for(int i=start;i<S.length();i++) {
+            if(!isPalin(S.substring(start,i+1))) continue;
+
+            cur.add(S.substring(start,i+1));
+            findAllPalin(S,ans,cur,i+1);
+            cur.remove(cur.size()-1);
+        }
+    }
+
+    public static boolean isPalin(String S) {
+        int L = 0;
+        int R = S.length()-1;
+
+        while(L<=R) {
+            if(S.charAt(L)!=S.charAt(R)) {
+                return false;
+            }
+            ++L;
+            --R;
+        }
+        return true;
+    }
+}
