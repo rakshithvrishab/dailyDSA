@@ -1,0 +1,50 @@
+class Solution {
+    public ArrayList<String> findPath(int[][] A) {
+        ArrayList<String> ans = new ArrayList<>();
+        int n = A.length;
+        if(A[0][0]==0 || A[n-1][n-1]==0) return ans;
+        f(ans , new StringBuilder() , A ,0,0,n);
+        return ans;
+    }
+    
+    public static void f(ArrayList<String> ans,StringBuilder sb,
+    int[][] A,int R, int C,int n){
+        
+        //Base Case
+        if(R==n-1 && C==n-1) {
+            ans.add(sb.toString());
+            return;
+        }
+        if(A[R][C]==-1||A[R][C]==0) {
+            return;
+        }
+        
+        //Main Logic
+        int tmp = A[R][C];
+        A[R][C] = -1;
+        
+        if(C-1>=0) { //Left
+            sb.append('L');
+            f(ans,sb,A,R,C-1,n);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        if(R-1>=0) { //Up
+            sb.append('U');
+            f(ans,sb,A,R-1,C,n);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        if(C+1<=n-1) { //Right
+            sb.append('R');
+            f(ans,sb,A,R,C+1,n);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        if(R+1<=n-1) { //Down
+            sb.append('D');
+            f(ans,sb,A,R+1,C,n);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        
+        A[R][C] = tmp;
+    }
+}
+
