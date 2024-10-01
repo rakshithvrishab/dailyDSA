@@ -1,0 +1,19 @@
+class Solution {
+    public int[] nextGreaterElement(int[] B, int[] A) {
+        Map<Integer, Integer> hm = new HashMap<>();
+        Stack<Integer> stk = new Stack<>();
+        for(int i=0;i<A.length;i++) {
+            while(stk.size()!=0 && stk.peek()<A[i]) { //if A[i] is > stack elements
+                hm.put(stk.pop(),A[i]); //then ele in stk has greater value as A[i]
+            }
+            stk.push(A[i]);
+        }
+        int[] ans = new int[B.length];
+        int i = 0;
+        for(int x:B) {
+            ans[i] = hm.getOrDefault(x , -1);
+            ++i;
+        }
+        return ans;
+    }
+}
