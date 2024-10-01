@@ -1,0 +1,35 @@
+class Solution {
+    public List<String> AllParenthesis(int n) {
+        List<String> ans = new ArrayList<>();
+        if (n == 0) {
+            return ans; // Handle case for n = 0
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        f(sb, ans, 0, 0, n);
+        return ans;
+    }
+    
+    public static void f(StringBuilder sb, List<String> ans, int open, int close, int n) {
+        // Base Case
+        if (close == n) {
+            ans.add(sb.toString());
+            return;
+        }
+        
+        // Main Logic
+        if (open < n) {
+            sb.append('(');
+            f(sb, ans, open + 1, close, n);
+            sb.deleteCharAt(sb.length() - 1); // Backtrack
+        }
+        
+        if (close < open) { //we can choose close only when it is less than open
+            sb.append(')');
+            f(sb, ans, open, close + 1, n);
+            sb.deleteCharAt(sb.length() - 1); // Backtrack
+        }
+    }
+}
+
+
