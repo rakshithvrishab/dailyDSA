@@ -1,0 +1,44 @@
+//Array Approach:
+class Solution {
+  public static int[] count_NGEs(int n, int a[], int q, int ind[]) {
+    //Creating an array to store the next greater elements count
+    int ngr[]=new int[q];
+    //Iterating over the indices
+    for(int i=0;i<q;i++){
+         int idx=ind[i];
+         int c=0;
+         //Iterating over the elements after the current index
+         for(int j=idx+1;j<n;j++){
+              //Checking if the element is greater than the current element
+              if(a[j]>a[idx])
+               c++;
+          }
+        //Storing the count of next greater elements in the array
+        ngr[i]=c;
+     }
+    //Returning the array with the count of next greater elements
+    return ngr;
+  }
+}
+
+//Stack Approach:
+class Solution {
+  public static int[] count_NGEs(int n, int arr[], int q, int indices[]) {
+    int [] ans= new int[q];
+      for(int i=0;i<q;i++){
+          int curr=arr[indices[i]];
+          Stack<Integer> st = new Stack<>();
+          int r=n-1;
+          while(r>indices[i]){
+              if(arr[r]>curr){
+                  st.push(arr[r]);
+              }
+              r--;
+          }
+          ans[i]=st.size();
+      }
+      return ans;
+     
+  }
+}
+
