@@ -1,0 +1,25 @@
+class Solution {
+    public int trap(int[] A) {
+        int n = A.length;
+        if(n==1) return 0;
+        int L = 0;
+        int R = n-1;
+        int maxL = A[L];
+        int maxR = A[R];
+        int ans = 0;
+
+        while(true) {
+            int curHeight = Math.min(A[L] , A[R]);
+            ans+=Math.min(maxL,maxR) - curHeight;
+            if(A[L]<A[R]){
+                ++L;
+                maxL=Math.max(maxL,A[L]);
+            }else{
+                --R;
+                maxR=Math.max(maxR,A[R]);
+            }
+            if(L>=R) break;
+        }
+        return ans;
+    }
+}
