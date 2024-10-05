@@ -1,0 +1,41 @@
+class Solution {
+    public int sumSubarrayMins(int[] arr) {
+        int n = arr.length;
+        long mod = 1_000_000_007;
+        
+        // Arrays to store previous and next smaller elements
+        int[] pse = new int[n];
+        int[] nse = new int[n];
+        
+        // Stack for Previous Smaller Element
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+            pse[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.push(i);
+        }
+        
+        // Clear stack for Next Smaller Element
+        stack.clear();
+        for (int i = n - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) {
+                stack.pop();
+            }
+            nse[i] = stack.isEmpty() ? n : stack.peek();
+            stack.push(i);
+        }
+        
+        // Calculate the result
+        long result = 0;
+        for (int i = 0; i < n; i++) {
+            long leftCount = i - pse[i];
+            long rightCount = nse[i] - i;
+            result = (result + arr[i] * leftCount * rightCount) % mod;
+        }
+        
+        return (int) result;
+    }
+}
+
