@@ -1,0 +1,35 @@
+class Solution {
+    public int[] asteroidCollision(int[] A) {
+        Stack<Integer> stk = new Stack<>();
+        
+        for(int i=0;i<A.length;i++) {
+            boolean destroyed = false;
+            while(stk.size()>0 && A[i]<0 && stk.peek()>0) {
+                if(stk.peek()<Math.abs(A[i])) {
+                    stk.pop();
+                }
+                else if(stk.peek()==Math.abs(A[i])) {
+                    stk.pop();
+                    destroyed = true; //curr A[i] asteroid is destroyed
+                    break;
+                }
+                else if(stk.peek()>Math.abs(A[i])) {
+                    destroyed = true; //curr A[i] asteroid is destroyed
+                    break;
+                }
+            }
+
+            if(destroyed==false) {
+                stk.push(A[i]); //push current asteroid
+            }
+        }
+
+        // Prepare the result array
+        int[] ans = new int[stk.size()];
+        for (int i = stk.size() - 1; i >= 0; i--) {
+            ans[i] = stk.pop(); // Fill the result array
+        }
+
+        return ans;
+    }
+}
