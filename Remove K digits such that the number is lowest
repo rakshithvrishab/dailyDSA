@@ -1,0 +1,31 @@
+class Solution {
+    public String removeKdigits(String num, int k) {
+        // Edge case for when k equals the length of num
+        if (k == num.length()) return "0";
+        
+        // Stack to store the digits of the resulting number
+        StringBuilder stack = new StringBuilder();
+        
+        for (char digit : num.toCharArray()) {
+            // While we can remove digits and the last digit in the stack is greater than the current digit
+            while (k > 0 && stack.length() > 0 && stack.charAt(stack.length() - 1) > digit) {
+                stack.deleteCharAt(stack.length() - 1);
+                k--;
+            }
+            stack.append(digit);
+        }
+        
+        // If we still have k digits to remove, remove from the end
+        while (k > 0) {
+            stack.deleteCharAt(stack.length() - 1);
+            k--;
+        }
+        
+        // Convert the stack to a string and remove leading zeros
+        String result = stack.toString().replaceAll("^0+", "");
+        
+        // Return "0" if the result is empty
+        return result.isEmpty() ? "0" : result;
+    }
+}
+
