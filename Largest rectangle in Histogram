@@ -1,0 +1,47 @@
+class Solution {
+    public int largestRectangleArea(int[] A) {
+        int n = A.length;
+        int[] pse = new int[n];
+        int[] nse = new int[n];
+        Arrays.fill(pse,-1);
+        Arrays.fill(nse,n);
+        Stack<Integer> stk = new Stack<>();
+        //finding PSEs of all elements
+        for(int i=0;i<n;i++) {
+            if(i==0) {
+                stk.push(i);
+                continue;
+            }
+            while(stk.size()!=0 && A[stk.peek()]>=A[i]) {
+                stk.pop();
+            }
+            pse[i] = stk.isEmpty() ? -1 : stk.peek();
+            stk.push(i);
+        }
+
+        //finding NSEs of all elements
+        stk.clear();
+        for(int i=n-1;i>=0;i--) {
+            if(i==n-1) {
+                stk.push(i);
+                continue;
+            }
+
+            while(stk.size()!=0 && A[stk.peek()]>=A[i]) {
+                stk.pop();
+            }
+            nse[i] = stk.isEmpty() ? n : stk.peek();
+            stk.push(i);
+        }
+
+        //find the area that can be created for each bar in histogram
+        int maxArea = Integer.MIN_VALUE;
+        for(int i=0;i<n;i++) {
+            int curArea = A[i] * (nse[i] - pse[i] -1);
+            maxArea = Math.max(curArea , maxArea);
+        }
+
+        return maxArea;
+    }
+}
+
