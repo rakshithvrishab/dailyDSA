@@ -1,0 +1,30 @@
+class StockSpanner {
+    Stack<Pair> stk = new Stack<>();
+    public StockSpanner() {
+        
+    }
+    
+    public int next(int price) {
+        if(stk.isEmpty()){
+            stk.push(new Pair(price,1));
+            return 1;
+        }
+        else{
+            int cnt=1;
+            while(stk.size()!=0 && stk.peek().val<=price){
+                cnt+=stk.pop().span;
+            }
+            stk.push(new Pair(price,cnt));
+            return cnt;
+        }
+    }
+}
+
+class Pair{
+    int val,span;
+    Pair(int val,int span){
+        this.val=val;
+        this.span=span;
+    }
+}
+
