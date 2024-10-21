@@ -1,0 +1,31 @@
+import java.util.HashMap;
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int n = s.length();
+        if (n == 0 || n == 1) {
+            return n;
+        }
+
+        HashMap<Character, Integer> hm = new HashMap<>();
+        int L = 0; // left pointer
+        int maxAns = 0;
+
+        for (int R = 0; R < n; R++) {
+            char currentChar = s.charAt(R);
+
+            // If the character is already in the HashMap
+            if (hm.containsKey(currentChar) && hm.get(currentChar) >= L) {
+                // Move the left pointer to the right of the last occurrence
+                L = hm.get(currentChar) + 1;
+            }
+
+            // Update the character's latest index
+            hm.put(currentChar, R);
+            // Calculate the maximum length of substring
+            maxAns = Math.max(maxAns, R - L + 1);
+        }
+
+        return maxAns;
+    }
+}
