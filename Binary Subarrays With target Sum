@@ -1,0 +1,25 @@
+import java.util.HashMap;
+
+class Solution {
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        HashMap<Integer, Integer> prefixSumCount = new HashMap<>();
+        prefixSumCount.put(0, 1); // Base case: a prefix sum of 0 occurs once.
+        
+        int currentSum = 0;
+        int count = 0;
+        
+        for (int num : nums) {
+            currentSum += num; // Update the current prefix sum.
+            
+            // Check if there's a prefix sum that we can subtract to get the goal.
+            if (prefixSumCount.containsKey(currentSum - goal)) {
+                count += prefixSumCount.get(currentSum - goal);
+            }
+            
+            // Update the count of the current prefix sum in the map.
+            prefixSumCount.put(currentSum, prefixSumCount.getOrDefault(currentSum, 0) + 1);
+        }
+        
+        return count;
+    }
+}
