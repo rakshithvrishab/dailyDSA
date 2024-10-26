@@ -13,7 +13,6 @@ class Solution {
         for (int i = 0; i < n - 3; i++) {
             // Skip duplicate values for the first position
             if (i > 0 && A[i] == A[i - 1]) continue;
-
             for (int j = i + 1; j < n - 2; j++) {
                 // Skip duplicate values for the second position
                 if (j > i + 1 && A[j] == A[j - 1]) continue;
