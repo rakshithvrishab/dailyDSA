@@ -1,0 +1,29 @@
+class Solution {
+    public int numberOfSubstrings(String s) {
+        int A = -1;
+        int B = -1;
+        int C = -1;
+        int n = s.length();
+        int ans = 0;
+        
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == 'a') {
+                A = i; // updating the last seen index of 'a'
+            } else if (s.charAt(i) == 'b') {
+                B = i; // updating the last seen index of 'b'
+            } else if (s.charAt(i) == 'c') {
+                C = i; // updating the last seen index of 'c'
+            }
+
+            // Check if all three characters have been seen
+            if (A != -1 && B != -1 && C != -1) {
+                int startOfSubString = Math.min(A, Math.min(B, C));
+                // The number of valid substrings that end at the current index `i`
+                ans += startOfSubString + 1;
+            }
+        }
+        
+        return ans;
+    }
+}
+
