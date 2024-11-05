@@ -1,0 +1,23 @@
+class Solution {
+    static int[] replaceWithRank(int A[], int N) {
+     // code here
+     PriorityQueue<Integer> pq = new PriorityQueue<>();
+     for(int i:A) {
+         pq.offer(i);
+     }
+     int i=0;
+     HashMap<Integer,Integer> hm = new HashMap<>();
+     while(pq.size()!=0) {
+         int val = pq.poll();
+         if(hm.containsKey(val)) continue;
+         hm.put(val,i);
+         ++i;
+     }
+     
+     for(int j=0;j<N;j++) {
+         A[j] = hm.get(A[j])+1;
+     }
+     return A;
+  }
+}
+   
