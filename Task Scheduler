@@ -1,0 +1,44 @@
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        // Step 1: Count the frequency of each task
+        int[] freq = new int[26]; // To count occurrences of tasks (A-Z)
+        for (char i : tasks) {
+            ++freq[i - 'A'];
+        }
+
+        // Step 2: Use a max-heap (priority queue) to store tasks by frequency
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);  
+        // Max-heap by frequency
+        for (int count : freq) {
+            if (count > 0) {
+                maxHeap.add(count);
+            }
+        }
+
+        int time = 0;
+        while(maxHeap.size()!=0) {
+            List<Integer> tempList = new ArrayList<>();
+            // In each cycle, we can place up to `n+1` different tasks (1 task and `n` idle slots)
+            int cycle=n+1;
+            for(int i=0;i<n+1;i++) {
+                if(maxHeap.size()!=0) {
+                    int curFreq = maxHeap.poll();
+                    --curFreq;
+                    tempList.add(curFreq);
+                }
+            }
+            for(int i:tempList) {
+                if(i>0)
+                maxHeap.offer(i);
+            }
+
+            if(maxHeap.size()==0) {
+                time+=tempList.size();
+            }else{
+                time+=(n+1);
+            }
+        }
+        return time;
+    }
+}
+
