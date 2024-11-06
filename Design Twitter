@@ -1,0 +1,83 @@
+class Twitter {
+
+    // A Tweet class to store tweet information
+    private static class Tweet {
+        int tweetId;
+        int timestamp;
+
+        Tweet(int tweetId, int timestamp) {
+            this.tweetId = tweetId;
+            this.timestamp = timestamp;
+        }
+    }
+
+    // Maps userId to a list of tweets (userId -> List of Tweet objects)
+    private Map<Integer, List<Tweet>> userTweets;
+    // Maps userId to a set of users they follow (userId -> Set of followee IDs)
+    private Map<Integer, Set<Integer>> followers;
+    // A timestamp to give each tweet a unique and increasing value for sorting
+    private int timestamp;
+
+    // Constructor initializes the data structures
+    public Twitter() {
+        userTweets = new HashMap<>();
+        followers = new HashMap<>();
+        timestamp = 0;
+    }
+
+    // Posts a tweet for the user with the given userId
+    public void postTweet(int userId, int tweetId) {
+        // Increment the timestamp for each new tweet to maintain correct order
+        timestamp++;
+        Tweet tweet = new Tweet(tweetId, timestamp);
+        
+        // Add tweet to the user's tweet list
+        userTweets.putIfAbsent(userId, new ArrayList<>());
+        userTweets.get(userId).add(tweet);
+    }
+
+    // Retrieves the 10 most recent tweets in the user's news feed
+    public List<Integer> getNewsFeed(int userId) {
+        List<Integer> newsFeed = new ArrayList<>();
+        // A priority queue to get the most recent 10 tweets
+        PriorityQueue<Tweet> pq = new PriorityQueue<>((a, b) -> b.timestamp - a.timestamp);
+
+        // Add the user's own tweets to the priority queue
+        if (userTweets.containsKey(userId)) {
+            for (Tweet tweet : userTweets.get(userId)) {
+                pq.add(tweet);
+            }
+        }
+
+        // Add tweets from the users the user follows
+        if (followers.containsKey(userId)) {
+            for (int followeeId : followers.get(userId)) {
+                if (userTweets.containsKey(followeeId)) {
+                    for (Tweet tweet : userTweets.get(followeeId)) {
+                        pq.add(tweet);
+                    }
+                }
+            }
+        }
+
+        // Collect the 10 most recent tweets
+        while (!pq.isEmpty() && newsFeed.size() < 10) {
+            newsFeed.add(pq.poll().tweetId);
+        }
+
+        return newsFeed;
+    }
+
+    // User with ID followerId starts following user with ID followeeId
+    public void follow(int followerId, int followeeId) {
+        followers.putIfAbsent(followerId, new HashSet<>());
+        followers.get(followerId).add(followeeId);
+    }
+
+    // User with ID followerId stops following user with ID followeeId
+    public void unfollow(int followerId, int followeeId) {
+        if (followers.containsKey(followerId)) {
+            followers.get(followerId).remove(followeeId);
+        }
+    }
+}
