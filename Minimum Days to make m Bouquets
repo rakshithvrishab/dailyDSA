@@ -1,0 +1,58 @@
+class Solution {
+    public int minDays(int[] bloomDay, int m, int k) {
+        int n = bloomDay.length;
+
+        // If there are not enough flowers to form m bouquets, return -1
+        if (n < m * k) return -1;
+
+        // Set the search space for binary search: L = min bloom day, R = max bloom day
+        int L = Integer.MAX_VALUE;
+        int R = Integer.MIN_VALUE;
+        for (int x : bloomDay) {
+            L = Math.min(L, x);
+            R = Math.max(R, x);
+        }
+
+        int ans = -1;
+        while (L <= R) {
+            int mid = (L + R) / 2;
+
+            // Check if it's possible to form m bouquets by day `mid`
+            if (canMakeBouquets(bloomDay, m, k, mid)) {
+                ans = mid;  // If yes, try to find a smaller day
+                R = mid - 1;
+            } else {
+                L = mid + 1;  // Otherwise, try a larger day
+            }
+        }
+
+        return ans;
+    }
+
+    // Helper function to check if we can make `m` bouquets with `k` flowers by day `mid`
+    private boolean canMakeBouquets(int[] bloomDay, int m, int k, int mid) {
+        int bouquets = 0;  // Counter for the number of bouquets we can make
+        int flowers = 0;   // Counter for consecutive flowers that have bloomed
+
+        for (int day : bloomDay) {
+            if (day <= mid) {
+                flowers++;  // The flower has bloomed by day `mid`
+                // If we've collected `k` flowers, form a bouquet and reset the counter
+                if (flowers == k) {
+                    bouquets++;
+                    flowers = 0;  // Reset for the next bouquet
+                }
+            } else {
+                flowers = 0;  // Reset the count if the flower hasn't bloomed yet
+            }
+
+            if (bouquets >= m) {
+                return true;  // We've made enough bouquets
+            }
+        }
+
+        return false;  // Not enough bouquets can be made by day `mid`
+    }
+}
+
+// TC : O(n⋅log(maxBloomDay))
