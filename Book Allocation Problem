@@ -1,0 +1,46 @@
+
+import java.util.ArrayList;
+public class Solution {
+    public static int findPages(ArrayList<Integer> A, int n, int m) {
+        //if books are less than number of students
+        if(A.size()<m) return -1;
+
+        int L = 0;
+        int R = 0;
+        //L will be largest pages in array
+        //R will be sum of array elements
+        for(int x:A) {
+            L = Math.max(L,x);
+            R+=x;
+        }
+        int ans = -1;
+        while(L<=R) {
+            int mid = (L+R)/2;
+            if(checkBooks(A,n,m,mid)) {
+                ans = mid;
+                R=mid-1;
+            } else{
+                L=mid+1;
+            }
+        }
+
+        return ans;
+    }
+
+    public static boolean checkBooks(ArrayList<Integer> A, int n, int m,int mid) {
+        int stud = 1;
+        int cur = A.get(0);
+        
+        for(int i=1;i<A.size();i++) {
+            if(cur+A.get(i)<=mid) {
+                cur+=A.get(i);
+            }else{
+                cur = A.get(i);
+                ++stud;
+                if(stud>m) return false;
+            }
+        }
+        return true;
+    }
+}
+//Time Complexity (TC): O(n * log(Sum of array))
