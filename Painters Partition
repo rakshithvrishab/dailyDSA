@@ -1,0 +1,46 @@
+
+public class Solution {
+    public static int findLargestMinDistance(ArrayList<Integer> boards, int k){
+        int L = 0; //max of all the boards
+        int R = 0; //sum of all the boards
+        for(int x: boards) {
+            if(x>L) L = x;
+            R+=x;
+        }
+        int ans = 0;
+        while(L<=R) {
+            int mid = (L+R)/2;
+
+            if(checkPaint(boards,k, mid)) {
+                ans = mid;
+                R=mid-1;
+            }else{
+                L=mid+1;
+            }
+        }
+        return ans;
+    }
+
+    public static boolean checkPaint(ArrayList<Integer> A,int k,int mid) {
+        int painters = 1;
+        int completedBoard = A.get(0);
+
+        for(int i=1;i<A.size();i++) {
+            if(completedBoard+A.get(i)<=mid) {
+                completedBoard+=A.get(i);
+            }else{
+                completedBoard=A.get(i);
+                ++painters; 
+                if(painters>k) return false;
+            }
+        }
+
+        return true;
+        //remember if the total painters given is 5 and
+        //this function completed all the boards by using just 4 painters
+        //still it returns true because of higher mid value
+        //however, we will be looking for lesser mid value in binary search by
+        //saving the current mid and making R=mid-1
+        //therefore at last we will get the correct answer
+    }
+}
