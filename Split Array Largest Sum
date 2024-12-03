@@ -1,0 +1,53 @@
+class Solution {
+    public int splitArray(int[] A, int k) {
+        int n = A.length;
+        
+        //sum of all array elements
+        int sum = 0;
+
+        //max of array elements
+        int max = 0;
+        for(int x:A) {
+            sum+=x;
+            max = Math.max(max , x);
+        }
+        if(n==k) return max; //if k==number of array elements, just return max
+        
+        int ans=0;
+        int L = max;
+        int R = sum;
+        while(L<=R) {
+            int mid = (L+R)/2;
+
+            if(checkSum(mid,A,k)){
+                ans = mid;
+                R=mid-1;
+            }else{
+                L=mid+1;
+            }
+        }
+        return ans;
+    }
+
+    public static boolean checkSum(int mid,int[] A, int k) {
+        int group=1;
+        int sum = A[0];
+
+        for(int i=1;i<A.length;i++) {
+            if(sum+A[i]<=mid) {
+                sum+=A[i];
+            }else{
+                sum=A[i];
+                ++group;
+                if(group>k) return false;
+            }
+        }
+
+        return true; 
+        //remember this function returns true even when group<k
+        //means when groups<k, still this return true
+        //however, in the binary search, we save this 
+        //answer and look for better answers
+        //thats why at the end, we get the right answer
+    }
+}
