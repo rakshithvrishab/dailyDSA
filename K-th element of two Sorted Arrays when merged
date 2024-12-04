@@ -1,0 +1,47 @@
+class Solution {
+    public long kthElement(int k, int A1[], int A2[]) {
+        int n1 = A1.length;
+        int n2 = A2.length;
+
+        // Ensure A1 is the smaller array to optimize the binary search
+        if (n1 > n2) {
+            return kthElement(k, A2, A1);  // Swap arrays if A1 is larger
+        }
+
+        int L = Math.max(0,k-n2); //in case k>n2
+        //we would be needing at least k-n2 elements from A1
+        //however, if k<n2 then k will be negative and
+        //L will be 0
+        
+        int R = Math.min(k,n1); //choose all the elements from A1
+        //or k < n1, we have to choose only k from A1
+
+        while (L <= R) {
+            int mid = (L + R) / 2; //number of ele picked from A1
+            int mid2 = k - mid;  // The remaining elements from A2
+
+
+            int l1 = (mid > 0) ? A1[mid - 1] : Integer.MIN_VALUE;
+            int r1 = (mid < n1) ? A1[mid] : Integer.MAX_VALUE;
+
+
+            int l2 = (mid2 > 0) ? A2[mid2 - 1] : Integer.MIN_VALUE;
+            int r2 = (mid2 < n2) ? A2[mid2] : Integer.MAX_VALUE;
+
+
+            if (l1 <= r2 && l2 <= r1) {
+                return Math.max(l1, l2);  // The k-th element is the max of the left partitions
+            } else if (l1 > r2) {
+                // If left part of A1 is too large, move the search to the left in A1
+                R = mid - 1;
+            } else {
+                // If left part of A2 is too large, move the search to the right in A1
+                L = mid + 1;
+            }
+        }
+
+        return 0;  
+    }
+}
+
+//TC: O(log(min(n1, k)))
