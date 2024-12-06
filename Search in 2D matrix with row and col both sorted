@@ -1,0 +1,21 @@
+class Solution {
+    public boolean searchMatrix(int[][] A, int k) {
+        int row = A.length;
+        int col = A[0].length;
+        //in the beginning we will be standing at upper right corner of matrix
+        int rowPointer = 0;
+        int colPointer = A[0].length-1;
+
+        while(rowPointer<row && colPointer>=0) {
+            if(A[rowPointer][colPointer] == k) return true;
+            else if(k<A[rowPointer][colPointer]) {
+                --colPointer;
+            }
+            else if(A[rowPointer][colPointer]<k) {
+                ++rowPointer;
+            }
+        }
+
+        return false;
+    }
+}
