@@ -1,0 +1,61 @@
+class Solution {
+    int median(int A[][]) {
+        int row=A.length;
+        int col=A[0].length;
+        
+        int totalEle = row*col;
+        //half will be number of elements in left and 
+        //right partitions of median
+        int half = totalEle/2;
+        
+        //find the search spaces L and R
+        //each row is sorted in mat
+        //L will be min of all the 1st elements of rows
+        //R will be max of all the last elements of rows
+        int L = Integer.MAX_VALUE;
+        int R = Integer.MIN_VALUE;
+        
+        for(int[] x:A){
+            if(x[0]<L) L=x[0];
+            
+            if(x[col-1]>R) R=x[col-1];
+        }
+        int ans = 0;
+        while(L<=R) {
+            int mid = (L+R)/2;
+            
+            //find the no. of elements <=mid in matrix
+            int numOfLessEle = 0;
+            for(int[] x: A) {
+                numOfLessEle+=findNumOfLessEleInMatrix(x,mid);
+            }
+            
+            if(numOfLessEle>half) {
+                ans = mid;
+                //look for a better answer
+                R=mid-1;
+            }else{
+                L=mid+1;
+            }
+        }
+        return ans;
+    }
+    
+    public static int findNumOfLessEleInMatrix(int[] A, int k) {
+        int L = 0;
+        int R = A.length - 1;
+        int ans = 0;
+        while (L <= R) {
+            int mid = (L + R) / 2;
+            
+            if (A[mid] <= k) {
+                ans = mid + 1;  // Count the element and move right
+                L = mid + 1;    // Move L right to continue checking for other values <= k
+            } else {
+                R = mid - 1;    // Move R left if A[mid] > k
+            }
+        }
+        return ans;
+    }
+
+}
