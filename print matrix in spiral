@@ -1,0 +1,57 @@
+class Solution {
+    public List<Integer> spiralOrder(int[][] A) {
+        int row = A.length;
+        int col = A[0].length;
+
+        List<Integer> ans = new ArrayList<>();
+        int L = 0;   //left
+        int R = col-1; //right
+        int T = 0;  //top
+        int B = row-1;  //bottom
+        
+        while(ans.size()<(row*col)) {
+            if(ans.size()<(row*col)){
+                fillAnsLeftToRight(ans,A,L,R,T);
+                ++T;
+            }
+            if(ans.size()<(row*col)){
+                fillAnsTopToBottom(ans,A,T,B,R);
+                --R;
+            }
+            if(ans.size()<(row*col)){
+                fillAnsRightToLeft(ans,A,R,L,B);
+                --B;
+            }
+            if(ans.size()<(row*col)){
+                fillAnsBottomToTop(ans,A,B,T,L);
+                ++L;
+            }
+        } 
+        return ans;
+    }
+
+    public static void fillAnsLeftToRight(List<Integer> ans,int[][] A,int L,int R,int T) {
+        for(int i=L;i<=R;i++) {
+            ans.add(A[T][i]);
+        }
+    }
+
+    public static void fillAnsTopToBottom(List<Integer> ans,int[][] A,int T,int B,int R) {
+        for(int i=T;i<=B;i++) {
+            ans.add(A[i][R]);
+        }
+    }
+
+    public static void fillAnsRightToLeft(List<Integer> ans,int[][] A,int R,int L,int B) {
+        for(int i=R;i>=L;i--) {
+            ans.add(A[B][i]);
+        }
+    }
+
+    public static void fillAnsBottomToTop(List<Integer> ans,int[][] A,int B,int T,int L) {
+        for(int i=B;i>=T;i--) {
+            ans.add(A[i][L]);
+        }
+    }
+}
+
