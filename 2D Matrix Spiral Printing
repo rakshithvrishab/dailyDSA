@@ -24,6 +24,7 @@ class Solution {
                 }
                 --rowEnd;
             }
+
             if(colBeg<=colEnd && rowBeg<=rowEnd){
                 for(int i=rowEnd;i>=rowBeg;i--){
                     ans.add(A[i][colBeg]);
