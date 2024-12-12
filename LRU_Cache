@@ -70,5 +70,4 @@ class LRUCache {
         addNode(new Node(key, value));
         m.put(key, head.next);
     }
-}
-
+} 
