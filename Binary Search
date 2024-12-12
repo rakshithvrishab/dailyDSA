@@ -23,6 +23,6 @@ class Solution {
     }
 }
 
-//TC : O{Log N)
+//TC : O(Log N)
 //SC : O(Log N)
 
