@@ -1,0 +1,40 @@
+class Solution {
+    public int[] topKFrequent(int[] A, int k) {
+        
+        //element and its freq in HM
+        HashMap<Integer,Integer> hm = new HashMap<>();
+        for(int x:A) {
+            hm.put(x, hm.getOrDefault(x, 0) + 1);
+        }
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a,b)->Integer.compare(a.freq,b.freq));
+
+        for(Integer i:hm.keySet()) {
+            pq.offer(new Pair(i,hm.get(i)));
+            //To get K max at last, we are
+            //Maintainig a minHeap
+            if(pq.size()>k) {
+                pq.poll();
+            }
+        }
+
+        int[] ans = new int[pq.size()];
+        int i=0;
+        while(pq.size()!=0) {
+            ans[i]=pq.poll().ele;
+            ++i;
+        }
+
+        return ans;
+    }
+
+    static class Pair{
+        int ele;
+        int freq;
+        Pair(int e, int f){
+            ele = e;
+            freq = f;
+        }
+    }
+}
+
