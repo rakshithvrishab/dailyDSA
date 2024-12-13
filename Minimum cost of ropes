@@ -1,0 +1,18 @@
+class Solution {
+    public long minCost(int[] A) {
+        PriorityQueue<Long> minHeap = new PriorityQueue<>();
+        for(long i:A) {
+            minHeap.offer(i);
+        }
+        long ans = 0;
+        while(minHeap.size()>1) {
+            long rope1 = minHeap.poll();
+            long rope2 = minHeap.poll();
+            
+            long cost = rope1+rope2;
+            ans = ans+cost;
+            minHeap.offer(rope1+rope2);
+        }
+        return ans;
+    }
+}
