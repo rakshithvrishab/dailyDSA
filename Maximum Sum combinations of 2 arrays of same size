@@ -1,0 +1,65 @@
+import java.util.*;
+
+public class Solution {
+    public int[] solve(int[] A, int[] B, int C) {
+        int n = A.length;
+        Arrays.sort(A);
+        Arrays.sort(B);
+        
+        // HashSet to track visited index combinations
+        HashSet<String> hs = new HashSet<>();
+        
+        // PriorityQueue to store the sum combinations in descending order
+        PriorityQueue<Triple> pq = new PriorityQueue<>((a, b) -> Integer.compare(b.sum, a.sum));
+        
+        int[] ans = new int[C];
+        
+        // Add the sum of the largest elements from A and B
+        pq.offer(new Triple(n - 1, n - 1, A[n - 1] + B[n - 1]));
+        
+        // Mark the pair (n-1, n-1) as visited
+        hs.add((n - 1) + "-" + (n - 1));
+        
+        int ansPtr = 0; // Pointer for the answer array
+        
+        for (int i = 0; i < C; i++) {
+            // Get the current max sum from the priority queue
+            ans[ansPtr] = pq.peek().sum;
+            ++ansPtr;
+            
+            int idxA = pq.peek().aIdx;
+            int idxB = pq.peek().bIdx;
+            pq.poll();
+            
+            // If both indices are greater than 0, explore further pairs
+            if (idxA > 0 && idxB > 0) {
+                // Add B's max and A's previous element
+                if (!hs.contains((idxA - 1) + "-" + idxB)) {
+                    pq.offer(new Triple(idxA - 1, idxB, A[idxA - 1] + B[idxB]));
+                    hs.add((idxA - 1) + "-" + idxB);
+                }
+                
+                // Add A's max and B's previous element
+                if (!hs.contains(idxA + "-" + (idxB - 1))) {
+                    pq.offer(new Triple(idxA, idxB - 1, A[idxA] + B[idxB - 1]));
+                    hs.add(idxA + "-" + (idxB - 1));
+                }
+            }
+        }
+        
+        return ans;
+    }
+}
+
+
+class Triple {
+    int aIdx;
+    int bIdx;
+    int sum;
+    
+    Triple(int ai, int bi, int s) {
+        aIdx = ai;
+        bIdx = bi;
+        sum = s;
+    }
+}
