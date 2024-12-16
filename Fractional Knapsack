@@ -1,0 +1,41 @@
+class Solution {
+    double fractionalKnapsack(List<Integer> val, List<Integer> wt, int cap){
+        List<Pair> al = new ArrayList<>();
+        for(int i=0;i<val.size();i++) {
+            al.add(new Pair(val.get(i) , wt.get(i)));
+        }
+        
+        Collections.sort(al, new Comparator<Pair>(){
+            @Override
+            public int compare(Pair p1, Pair p2) {
+                return Double.compare(p2.costPerKg,p1.costPerKg);
+            }
+        });
+        
+        double curWeight = 0;
+        double curVal = 0;
+        for(Pair p:al) {
+            if((curWeight+p.weight)<=cap) {
+                curWeight = curWeight+p.weight;
+                curVal+=p.val;
+            }else{
+                double remWeight = cap - curWeight;
+                double remVal = remWeight*(p.costPerKg);
+                
+                return curVal+remVal;
+            }
+        }
+        return curVal;
+    }
+    
+    static class Pair{
+        int val;
+        int weight;
+        double costPerKg;
+        Pair(int v, int w) {
+            val = v;
+            weight = w;
+            costPerKg = (double)val/weight;
+        }
+    }
+}
