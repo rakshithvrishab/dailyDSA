@@ -1,0 +1,41 @@
+class Solution {
+    public boolean lemonadeChange(int[] A) {
+        //Remember, it is given the note denaominations are
+        //5 , 10 and 20 only
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        for(int x: A) {
+            if(!hm.containsKey(x)){
+                hm.put(x,1);
+            }else{
+                hm.put(x,hm.get(x)+1);
+            }
+
+            if(x==10){
+                int remChange = 5;
+                if(hm.containsKey(5) && hm.get(5)>=1) {
+                    hm.put(5,hm.get(5)-1);
+                    continue;
+                }else{
+                    return false;
+                }
+            }else if(x==20) {
+                int remChange = 15;
+
+                if(hm.containsKey(5) && hm.containsKey(10) &&hm.get(10)>=1 && hm.get(5)>=1) {
+                    hm.put(5,hm.get(5)-1);
+                    hm.put(10,hm.get(10)-1);
+                    continue;
+                }
+                else if(hm.containsKey(5) && hm.get(5)>=3) {
+                    hm.put(5,hm.get(5)-3);
+                    continue;
+                }else{
+                    return false;
+                }
+            }        
+        }
+        return true;
+    }
+}
+
+//TC: O(N) SC: O(1)
