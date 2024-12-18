@@ -1,0 +1,33 @@
+class Solution {
+    static int findPlatform(int arr[], int dep[]) {
+        // Sort arrival and departure times
+        Arrays.sort(arr);
+        Arrays.sort(dep);
+        //pointers for both the arrays
+        int arrPtr = 0;
+        int depPtr = 0;
+        int cnt = 0;
+        
+        int n = arr.length;
+        
+        //lets assume train 1 arrives at arr[arrPtr] time
+        cnt = 1; //so PF was occuppied
+        int maxCnt = 1; //max count so far
+        arrPtr++; //increment arr pointer
+        
+        while(arrPtr<n && depPtr<n) {
+            //find the next smallest time available among
+            //both the arrays
+            if(arr[arrPtr]<=dep[depPtr]) {
+                ++cnt;
+                maxCnt = Math.max(cnt, maxCnt);
+                ++arrPtr;
+            }
+            else{
+                --cnt;
+                ++depPtr;
+            }
+        }
+        return maxCnt;
+    }
+}
