@@ -17,6 +17,5 @@ class Solution {
         return majority;
     }
 }
-
 //TC:O(N) 
 //SC:O(1)
