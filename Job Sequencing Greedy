@@ -1,0 +1,61 @@
+ 
+class Solution {
+    public ArrayList<Integer> JobSequencing(int[] id, int[] deadline, int[] profit) {
+        int n = id.length;
+        
+        // Step 1: Create a list of jobs with id, deadline, and profit
+        ArrayList<Job> jobs = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            jobs.add(new Job(id[i], deadline[i], profit[i]));
+        }
+        
+        // Step 2: Sort the jobs based on profit in descending order
+        Collections.sort(jobs, (a, b) -> b.profit - a.profit); // Sorting by profit descending
+        
+        // Step 3: Find the maximum deadline to know the maximum possible time slots
+        int maxDeadline = 0;
+        for (int i = 0; i < n; i++) {
+            maxDeadline = Math.max(maxDeadline, jobs.get(i).deadline);
+        }
+        
+        // Step 4: Create an array to track which time slots are already filled
+        boolean[] slots = new boolean[maxDeadline + 1]; // to track slots (0 = free, 1 = occupied)
+        int totalJobs = 0;  // Count of jobs done
+        int totalProfit = 0;  // Total profit earned
+        
+        // Step 5: Try to schedule each job
+        for (int i = 0; i < n; i++) {
+            // Find a free slot for the current job before its deadline
+            for (int j = jobs.get(i).deadline; j > 0; j--) {
+                if (!slots[j]) {
+                    // If the slot is free, assign the job to this slot
+                    slots[j] = true;
+                    totalJobs++;
+                    totalProfit += jobs.get(i).profit;
+                    break; // Exit once the job is scheduled
+                }
+            }
+        }
+        
+        // Step 6: Return the result as a list containing the total jobs and total profit
+        ArrayList<Integer> result = new ArrayList<>();
+        result.add(totalJobs);
+        result.add(totalProfit);
+        
+        return result;
+    }
+    
+    // Helper class to represent each job
+    static class Job {
+        int id;
+        int deadline;
+        int profit;
+        
+        Job(int id, int deadline, int profit) {
+            this.id = id;
+            this.deadline = deadline;
+            this.profit = profit;
+        }
+    }
+}
+
