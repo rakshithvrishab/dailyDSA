@@ -1,0 +1,41 @@
+import java.util.*;
+
+class Solution {
+    static int pageFaults(int N, int C, int pages[]) {
+        // This will store the pages currently in memory
+        Set<Integer> memory = new HashSet<>();
+        // This will maintain the order of usage (used as a queue)
+        LinkedList<Integer> accessOrder = new LinkedList<>();
+        
+        int pageFaults = 0;
+        
+        // Iterate over each page in the pages[] array
+        for (int i = 0; i < N; i++) {
+            int page = pages[i];
+            
+            // If page is not in memory, it's a page fault
+            if (!memory.contains(page)) {
+                // If memory is full, remove the least recently used page
+                if (memory.size() == C) {
+                    int lruPage = accessOrder.removeLast();  // Remove the least recently used page
+                    memory.remove(lruPage);  // Remove it from the memory set as well
+                }
+                
+                // Add the new page to memory
+                memory.add(page);
+                // Add this page to the access order (mark it as recently used)
+                accessOrder.addFirst(page);
+                
+                // Increment page fault count
+                pageFaults++;
+            } else {
+                // If the page is already in memory, update its position in the access order
+                accessOrder.remove((Integer)page);  // Remove the page from its current position
+                accessOrder.addFirst(page);  // Place the page at the front (most recently used)
+            }
+        }
+        
+        return pageFaults;
+    }
+}
+
