@@ -1,0 +1,24 @@
+
+class Solution {
+    static int solve(int bt[]) {
+        int n = bt.length;
+        
+        // Step 1: Sort the burst time array
+        Arrays.sort(bt);
+        
+        // Step 2: Calculate the total waiting time
+        int totalWaitingTime = 0;
+        int currentWaitingTime = 0;
+        
+        // Calculate total waiting time for each process
+        for (int i = 0; i < n; i++) {
+            totalWaitingTime += currentWaitingTime;
+            currentWaitingTime += bt[i];
+        }
+        
+        // Step 3: Calculate average waiting time
+        int averageWaitingTime = totalWaitingTime / n;
+        
+        return averageWaitingTime; // Return the floor value of average waiting time
+    }
+}
