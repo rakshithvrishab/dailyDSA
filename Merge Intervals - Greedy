@@ -1,0 +1,31 @@
+class Solution {
+    public int[][] merge(int[][] A) {
+        //Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+        Arrays.sort(A, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] a, int[] b){
+                return Integer.compare(a[0],b[0]);
+            }    
+        });
+        
+        List<int[]> res = new ArrayList<>();
+
+        for(int[] x: A) {
+            //if the last interval in the res array has ending less than
+            //the start of cur interval
+            if(res.size()==0 || res.get(res.size()-1)[1]<x[0]) {
+                res.add(x);
+            }else{
+                //array is sorted on basis of start times of intervals
+                //so the current start time cannot be lesser than the
+                //last interval's start in res array, however the cur
+                //ending might be less than the ending of last interval
+                //present in the res array
+                res.get(res.size()-1)[1]=Math.max(x[1], res.get(res.size()-1)[1]);
+            }
+        }
+
+        return res.toArray(new int[res.size()][]);
+    }
+}
+//TC: O( N log N) SC: O(n)
