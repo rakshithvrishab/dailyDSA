@@ -1,0 +1,25 @@
+class Solution {
+    public int countGoodNumbers(long n) {
+        long mod = 1000000007;
+        long oddPos=n/2;
+        long evnPos=n-oddPos;
+        long odd = fun(4, oddPos, mod);
+        long even = fun(5, evnPos, mod);
+        return (int)((odd * even) % mod);
+    }
+    
+    public long fun(long x, long y, long mod){
+        if (y == 0) {
+            return 1;
+        }
+        long half = fun(x, y / 2, mod);
+        
+        if (y % 2 == 0) {
+            return (half * half) % mod;
+        }
+        else{
+            return (x*half*half) % mod;
+        }
+    }
+}
+
