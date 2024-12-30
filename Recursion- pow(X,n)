@@ -20,7 +20,6 @@ class Solution {
         if(pwr%2==0) { 
             return ans*ans;
         }
-
         return num*ans*ans;
     }
 }
