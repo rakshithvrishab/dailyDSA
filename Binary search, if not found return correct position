@@ -3,7 +3,6 @@ class Solution {
         // Use binary search to find the correct insertion point
         return binSearch(A, k, 0, A.length - 1);
     }
-
     public static int binSearch(int[] A, int k, int S, int E) {
         while (S <= E) {
             int mid = (S + E) / 2;
