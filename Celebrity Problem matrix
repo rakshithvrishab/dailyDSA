@@ -9,8 +9,7 @@ class Solution {
                 top++;
             else
                 bot--;
-        }
-        
+        }  
          // checking if top is actually a celebrity or not.
         for (int i = 0; i < n; i++) {
             // if any person doesn't know top or top knows any person, we return -1.
