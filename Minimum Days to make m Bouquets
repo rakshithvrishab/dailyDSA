@@ -25,10 +25,8 @@ class Solution {
                 L = mid + 1;  // Otherwise, try a larger day
             }
         }
-
         return ans;
     }
-
     // Helper function to check if we can make `m` bouquets with `k` flowers by day `mid`
     private boolean canMakeBouquets(int[] bloomDay, int m, int k, int mid) {
         int bouquets = 0;  // Counter for the number of bouquets we can make
