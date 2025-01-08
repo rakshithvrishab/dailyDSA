@@ -34,7 +34,6 @@ public class Solution {
                 if(painters>k) return false;
             }
         }
-
         return true;
         //remember if the total painters given is 5 and
         //this function completed all the boards by using just 4 painters
