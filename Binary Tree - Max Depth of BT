@@ -1,0 +1,14 @@
+class Solution {
+    public int maxDepth(TreeNode root) {
+        return f(root);
+    }
+    public static int f(TreeNode root) {
+        //base Case
+        if(root==null) {
+            return 0;
+        }
+
+        //Main Logic;
+        return 1+Math.max(f(root.left),f(root.right));
+    }
+}
