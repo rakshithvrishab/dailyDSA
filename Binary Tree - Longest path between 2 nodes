@@ -1,0 +1,28 @@
+class Solution {
+    public int diameterOfBinaryTree(TreeNode root) {
+        // Create an array to store the diameter. The array size is 1.
+        int[] dia = new int[1];
+        height(root, dia);
+        return dia[0];  // Return the diameter stored in the array
+    }
+
+    // Helper function to compute the height of 
+    //a node and update the diameter
+    private int height(TreeNode node, int[] dia) {
+        if (node == null) {
+            return 0;  // Base case: the height of an empty node is 0
+        }
+
+        // Recursively get the height of the left and right subtrees
+        int leftHeight = height(node.left, dia);
+        int rightHeight = height(node.right, dia);
+
+        // The diameter at the current node is the sum 
+        //of the heights of the left and right subtrees
+        dia[0] = Math.max(dia[0], leftHeight + rightHeight);
+
+        // Return the height of the current node, which is 
+        //the max height of its subtrees + 1
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+}
