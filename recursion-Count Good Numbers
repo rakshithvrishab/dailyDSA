@@ -7,7 +7,6 @@ class Solution {
         long even = fun(5, evnPos, mod);
         return (int)((odd * even) % mod);
     }
-    
     public long fun(long x, long y, long mod){
         if (y == 0) {
             return 1;
