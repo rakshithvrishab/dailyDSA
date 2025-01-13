@@ -1,0 +1,51 @@
+class Solution {
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        Queue<Pairs> q = new LinkedList<>();
+        HashMap<Integer, ArrayList<Integer>> HM = new HashMap<>();
+        int maxCol = Integer.MIN_VALUE;
+        int minCol = Integer.MAX_VALUE;
+
+        q.add(new Pairs(0, root));
+
+        while (!q.isEmpty()) {
+            Pairs tmp = q.peek();
+            TreeNode tmpNode = tmp.node;
+            int col = tmp.column;
+
+            minCol = Math.min(minCol, col);
+            maxCol = Math.max(maxCol, col);
+
+            if (tmpNode.left != null) {
+                q.add(new Pairs(col - 1, tmpNode.left));
+            }
+
+            if (tmpNode.right != null) {
+                q.add(new Pairs(col + 1, tmpNode.right));
+            }
+
+            HM.putIfAbsent(col, new ArrayList<>());
+            HM.get(col).add(tmpNode.val);
+
+            q.remove();
+        }
+
+        for (int i = minCol; i <= maxCol; i++) {
+            res.add(new ArrayList<>(HM.get(i)));
+        }
+
+        return res;
+    }
+}
+
+class Pairs {
+    int column;
+    TreeNode node;
+
+    Pairs(int column, TreeNode node) {
+        this.column = column;
+        this.node = node;
+    }
+}
+
+//TC : O(N) SC: O(N)
