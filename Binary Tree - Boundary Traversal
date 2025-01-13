@@ -1,0 +1,56 @@
+import java.util.*;
+
+public class Solution {
+    public static List<Integer> traverseBoundary(TreeNode A){
+        List<Integer> ans = new ArrayList<>();
+        if (A == null) return ans;
+        ans.add(A.data);
+
+        // Add left boundary except for the leaf node
+        addLeftBoundary(A.left, ans);
+        // Add leaf nodes
+        addLeafNodes(A, ans);
+        // Add right boundary except for the leaf node
+        addRightBoundary(A.right, ans);
+
+        return ans;
+    }
+
+    public static void addLeftBoundary(TreeNode A, List<Integer> ans){
+        if(A == null || (A.left == null && A.right == null)) {
+            return;
+        }
+        ans.add(A.data);
+
+        if (A.left != null) {
+            addLeftBoundary(A.left, ans);
+        } else {
+            addLeftBoundary(A.right, ans);
+        }
+    }
+
+    public static void addRightBoundary(TreeNode A,List<Integer> ans){
+        if(A == null || (A.left == null && A.right == null)) {
+            return;
+        }
+        if (A.right != null) {
+            addRightBoundary(A.right, ans);
+        } else {
+            addRightBoundary(A.left, ans);
+        }
+        ans.add(A.data);
+    }
+
+    public static void addLeafNodes(TreeNode A,List<Integer> ans){
+        if(A == null) {
+            return;
+        }
+        if (A.left == null && A.right == null) {
+            ans.add(A.data);
+            return;
+        }
+        addLeafNodes(A.left, ans);
+        addLeafNodes(A.right, ans);
+    }
+}
+
