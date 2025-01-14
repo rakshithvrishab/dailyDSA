@@ -1,0 +1,55 @@
+class Solution {
+    static ArrayList<Integer> topView(Node root) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        if(root==null) return ans;
+        
+        HashMap<Integer,ArrayList<Integer>> hm = new HashMap<>();
+        Queue<Pair> que = new LinkedList<>();
+        
+        //add root to queue and hm
+        que.offer(new Pair(0,root));
+        
+        //keep 2 variables for min and max dist
+        int minDist = 0;
+        int maxDist = 0;
+        
+        while(que.size()!=0) {
+            Pair cur = que.poll();
+            int curDist = cur.dist;
+            Node curNode = cur.node;
+            
+            //find min and max dist on the go 
+            minDist = Math.min(minDist, curDist);
+            maxDist = Math.max(maxDist, curDist);
+            
+            if(!hm.containsKey(curDist)) {
+                hm.put(curDist,new ArrayList<>());
+            }
+            hm.get(curDist).add(curNode.data);
+            
+            if(curNode.left!=null) {
+                que.offer(new Pair(curDist-1,curNode.left));
+            }
+            
+            if(curNode.right!=null) {
+                que.offer(new Pair(curDist+1,curNode.right));
+            }
+        }
+        
+        for(int i=minDist;i<=maxDist;i++) {
+            //1st ele in list associated to distance in hashmap
+            ans.add(hm.get(i).get(0)); 
+        }
+        return ans;
+    }
+    
+    static class Pair{
+        int dist;
+        Node node;
+        Pair(int d, Node n) {
+            dist=d;
+            node=n;
+        }
+    }
+}
+
