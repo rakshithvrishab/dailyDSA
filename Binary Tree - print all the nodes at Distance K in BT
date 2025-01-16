@@ -1,0 +1,66 @@
+class Solution {
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        List<Integer> ans = new ArrayList<>();
+
+        // Step 1: Find the parent nodes of all nodes except root using DFS
+        HashMap<TreeNode, TreeNode> hm = new HashMap<>();
+        findParents(root, hm);
+
+        // Step 2: Perform a BFS traversal from the target node
+        HashSet<TreeNode> visited = new HashSet<>();
+        Queue<TreeNode> que = new LinkedList<>();
+        que.offer(target);
+        visited.add(target);
+        int dist = 0;
+
+        while (!que.isEmpty()) {
+            int n = que.size();
+            // Process nodes level by level
+            for (int i = 0; i < n; i++) {
+                TreeNode cur = que.poll();
+
+                // If we reached the target distance, add the current node's value to the result
+                if (dist == k) {
+                    ans.add(cur.val);
+                }
+
+                // Explore neighbors (up, left, right) for the next level
+                if (hm.containsKey(cur) && !visited.contains(hm.get(cur))) {
+                    que.offer(hm.get(cur)); // parent node
+                    visited.add(hm.get(cur));
+                }
+                if (cur.left != null && !visited.contains(cur.left)) {
+                    que.offer(cur.left); // left child
+                    visited.add(cur.left);
+                }
+                if (cur.right != null && !visited.contains(cur.right)) {
+                    que.offer(cur.right); // right child
+                    visited.add(cur.right);
+                }
+            }
+            dist++;
+            // If we have processed nodes at distance `k`, we stop the traversal
+            if (dist > k) break;
+        }
+
+        return ans;
+    }
+
+    // Helper function to record the parent of each node
+    public static void findParents(TreeNode root, HashMap<TreeNode, TreeNode> hm) {
+        if (root == null) {
+            return;
+        }
+
+        if (root.left != null) {
+            hm.put(root.left, root);
+        }
+        if (root.right != null) {
+            hm.put(root.right, root);
+        }
+        findParents(root.left, hm);
+        findParents(root.right, hm);
+    }
+}
+
+//TC: O(N) SC: O(N)
