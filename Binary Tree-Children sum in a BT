@@ -1,0 +1,44 @@
+class Solution {
+    public static int isSumProperty(Node root) {
+        // Base case: If the root is null, 
+        //it trivially satisfies the property
+        if (root == null) {
+            return 1;
+        }
+        
+        // If the node is a leaf node (no children), 
+        //it satisfies the property
+        if (root.left == null && root.right == null) {
+            return 1;
+        }
+        
+        // Get the sum of the left and 
+        //right children (considering 0 if null)
+        int leftSum = (root.left != null) ? root.left.data : 0;
+        int rightSum = (root.right != null) ? root.right.data : 0;
+
+        // If the current node's data is not 
+        //equal to the sum of its children's data
+        //We do not need to proceed recursively if 
+        //cur node doesnt satisfy the condition
+        if (root.data != leftSum + rightSum) {
+            return 0;
+        }
+
+        // Recursively check for the left and 
+        //right subtrees
+        int leftCheck = isSumProperty(root.left);
+        int rightCheck = isSumProperty(root.right);
+
+        // If either of the subtrees does not 
+        //satisfy the property, return 0
+        if (leftCheck == 0 || rightCheck == 0) {
+            return 0;
+        }
+
+        // If the current node satisfies the property and 
+        //both subtrees satisfy the property, return 1
+        return 1;
+    }
+}
+
