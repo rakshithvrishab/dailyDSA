@@ -1,0 +1,52 @@
+class Solution {
+    public int widthOfBinaryTree(TreeNode root) {
+        if(root==null){
+            return 0;
+        }
+        Queue<Pair> que = new LinkedList<>();
+        que.offer(new Pair(0 , root)); //root and its position at 1st level
+        int ans = 0;
+
+        while(que.size()!=0) {
+            int n = que.size();
+            //for every level we need to find
+            //width of this level
+            int leftMostPos = 0;
+            int rightMostPos = 0;
+            for(int i=0;i<n;i++) {
+                Pair cur = que.poll();
+                int curPos = cur.pos;
+                TreeNode curNode = cur.node;
+
+                if(i==0){
+                    leftMostPos=curPos;
+                }
+                if(i==n-1) {
+                    rightMostPos=curPos;
+                }
+                //add cur node's children to queue
+                if(curNode.left!=null) {
+                    que.offer(new Pair(2*curPos+1 , curNode.left));
+                }
+                if(curNode.right!=null) {
+                    que.offer(new Pair(2*curPos+2 , curNode.right));
+                }
+            }
+
+            ans=Math.max(ans,rightMostPos-leftMostPos+1);
+        }
+
+        return ans;
+    }
+
+    static class Pair{
+        int pos;
+        TreeNode node;
+        Pair(int p, TreeNode n) {
+            pos=p;
+            node=n;
+        }
+    }
+}
+
+//TC : O(N) SC: O(N) 
