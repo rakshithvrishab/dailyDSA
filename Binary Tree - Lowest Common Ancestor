@@ -1,0 +1,83 @@
+//Approach 1: Using extra space
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        List<TreeNode> pathP = new ArrayList<>();
+        List<TreeNode> pathQ = new ArrayList<>();
+
+        // Find paths to p and q
+        findPath(root, p, pathP);
+        findPath(root, q, pathQ);
+
+        // Find the last common node in both paths
+        TreeNode common = null;
+        for (int i = 0; i < Math.min(pathP.size(), pathQ.size()); i++) {
+            if (pathP.get(i) == pathQ.get(i)) {
+                common = pathP.get(i);
+            } else {
+                break;
+            }
+        }
+        return common;
+    }
+
+    public boolean findPath(TreeNode root, TreeNode target, List<TreeNode> path) {
+        // Base Case
+        if (root == null) {
+            return false;
+        }
+
+        // Add the current node to the path
+        path.add(root);
+
+        // If the current node is the target, we're done
+        if (root == target) {
+            return true;
+        }
+
+        // Recursively search in the left and right subtrees
+        if (findPath(root.left, target, path)) {
+            return true;
+        }
+        if (findPath(root.right, target, path)) {
+            return true;
+        }
+
+        // If the target was not found in either subtree, backtrack
+        path.remove(path.size() - 1);
+        return false;
+    }
+}
+
+***************************************************************************************************************************
+Approach 2: Recursion
+1.	If the current node is null, return null (base case).
+2.	If the current node is equal to p or q, return the current node because it could be the ancestor for one of the nodes.
+3.	If both the left and right subtrees contain either p or q, then the current node is the LCA.
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null) {
+            return null;
+        }
+        if(root==p || root==q) {
+            return root;
+        }
+
+        TreeNode L = lowestCommonAncestor(root.left,p,q);
+        TreeNode R = lowestCommonAncestor(root.right,p,q);
+        //If we dont find bot the nodes on either sides, return null 
+        if(L==null && R==null) return null;
+        //If we have found target on any one of the side
+        if(L!=null && R==null) return L;
+        if(L==null && R!=null) return R;
+        
+        //If we have found the target on either sides, root is LCA 
+        if(L!=null && R!=null) return root;
+
+        return null;
+    }
+}
+
+***********************************************************************************************************************
+TC: O(N)
+SC: O(Log N) in case of balances tree
+       O(H or N) in case of worst case, where tree is un balanced
