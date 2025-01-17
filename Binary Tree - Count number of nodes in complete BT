@@ -1,0 +1,29 @@
+class Solution {
+    public int countNodes(TreeNode root) {
+        int leftDepth = countLeftDepth(root);
+        int rightDepth = countRightDepth(root);
+
+        if(leftDepth == rightDepth) {
+            return (int)Math.pow(2,rightDepth)-1;
+        }
+        else{
+            return 1+countNodes(root.left)+countNodes(root.right);
+        }
+    }
+
+    public static int countLeftDepth(TreeNode root) {
+        if(root==null) {
+            return 0;
+        }
+        return 1+countLeftDepth(root.left);
+    }
+    public static int countRightDepth(TreeNode root) {
+        if(root==null) {
+            return 0;
+        }
+        return 1+countRightDepth(root.right);
+    }
+}
+
+TC: Log N
+SC: LogN
