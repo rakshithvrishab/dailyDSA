@@ -1,0 +1,92 @@
+class Solution {
+
+    public static int minTime(Node root, int tar) {
+        // Step 1: Find parents of each node
+        // remember hm<child, parent>, because child can have 
+        // only 1 parent
+        HashMap<Node, Node> hm = new HashMap<>();
+        
+        Node target = findTarget(root, tar);
+        
+  // If the target is not found, return 0 or handle the error case
+        if (target == null) {
+            return 0;
+        }
+        
+        findParents(root, hm);
+        
+        Queue<Node> que = new LinkedList<>();
+        HashSet<Node> visited = new HashSet<>();
+        
+        que.offer(target);
+        visited.add(target);
+        int time = -1;
+        
+  // Start BFS traversal from the target node
+        while (!que.isEmpty()) {
+            int n = que.size();
+            for (int i = 0; i < n; i++) {
+                Node cur = que.poll();
+                
+ // Process the parent of the current node if it hasn't been visited
+                if (hm.containsKey(cur) && !visited.contains(hm.get(cur))) {
+                    que.offer(hm.get(cur));
+                    visited.add(hm.get(cur));
+                }
+                
+ // Process the left child if it exists and hasn't been visited
+                if (cur.left != null && !visited.contains(cur.left)) {
+                    que.offer(cur.left);
+                    visited.add(cur.left);
+                } 
+                
+// Process the right child if it exists and hasn't been visited
+                if (cur.right != null && !visited.contains(cur.right)) {
+                    que.offer(cur.right);
+                    visited.add(cur.right);
+                }
+            }
+            ++time;
+        }
+        return time;
+    }
+    
+  // Helper method to find the parents of each node
+    public static void findParents(Node root, HashMap<Node, Node> hm) {
+        if (root == null) {
+            return;
+        }
+
+        if(root.left!=null) {
+            hm.put(root.left,root);
+        }
+        if(root.right!=null) {
+            hm.put(root.right,root);
+        }
+        
+        findParents(root.left,hm);
+        findParents(root.right,hm);
+    }
+    
+  // Helper method to find the target node
+    public static Node findTarget(Node root, int k) {
+        if (root == null) {
+            return null;
+        }
+        if (root.data == k) {
+            return root;
+        }
+
+  // Search left and right subtrees
+        Node leftResult = findTarget(root.left, k);
+        if (leftResult != null) {
+            return leftResult;
+        }
+
+        return findTarget(root.right, k); 
+    }
+}
+
+//Time Complexity (TC): O(N)
+//Space Complexity (SC): O(N)
+
