@@ -1,0 +1,7 @@
+class Solution{
+    public static boolean isPossible(int a, int b){
+        if(a==b) return false;
+        if(a==2 || b==2) return true; //If any one is In-order
+        return false;
+    }
+}
