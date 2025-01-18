@@ -1,0 +1,28 @@
+class Solution {
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        HashMap<Integer,Integer> hm = new HashMap<>();
+        int n = inorder.length;
+        for(int i=0;i<n;i++) {
+            hm.put(inorder[i],i);
+        }
+        TreeNode root = f(inorder,0,n-1,postorder,0,n-1,hm);
+        return root;
+    }
+
+    public static TreeNode f(int[] I,int iS,int iE, int[] P,int pS,int pE, HashMap<Integer,Integer> hm) {
+        //Base Case
+        if(iS>iE || pS>pE) return null;
+        //Main Logic
+        TreeNode root = new TreeNode(P[pE]);
+
+        //find the index of the root ele in 
+        //the inorder array
+        int idxOfRoot = hm.get(P[pE]);
+        int numsRight = iE-idxOfRoot;
+
+        root.left = f(I,iS,idxOfRoot-1,P,pS,pE-numsRight-1,hm);
+        root.right = f(I,idxOfRoot+1,iE,P,pE-numsRight,pE-1,hm);
+
+        return root;
+    }
+}
