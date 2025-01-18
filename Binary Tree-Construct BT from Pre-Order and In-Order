@@ -1,0 +1,29 @@
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int n = preorder.length;
+        HashMap<Integer,Integer> hm = new HashMap<>();
+        for(int i=0;i<inorder.length;i++) {
+            hm.put(inorder[i],i);
+        }
+
+        TreeNode root = f(preorder,0,n-1,inorder,0,n-1,hm);
+        return root;
+    }
+
+    public static TreeNode f(int[] P,int pS,int pE,int[] I,int iS,int iE,HashMap<Integer,Integer> hm) {
+        //Base Case
+        if(pS>pE || iS>iE) return null;
+        //Main Logic
+        TreeNode root = new TreeNode(P[pS]);
+
+        //get the index of this root element in In-Order array
+        int inOrdrIdxRoot = hm.get(P[pS]);
+        //Elements on the left of the root
+        int numsLeft = inOrdrIdxRoot-iS;
+
+        root.left=f(P,pS+1,pS+numsLeft,I,iS,inOrdrIdxRoot-1,hm);
+        root.right = f(P,pS+numsLeft+1,pE,I,inOrdrIdxRoot+1,iE,hm);
+
+        return root;
+    }
+}
