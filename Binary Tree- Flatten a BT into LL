@@ -1,0 +1,21 @@
+class Solution {
+    TreeNode prev=null;
+    public void flatten(TreeNode root) {
+        if(root==null) return;
+
+        TreeNode L = root.left;
+        TreeNode R = root.right;
+
+        if(prev!=null) {
+            prev.left=null;
+            prev.right=root;
+        }
+
+        prev=root;
+        
+        flatten(L);
+        flatten(R);
+    }
+}
+
+//TC: O(N) SC: O(N)
