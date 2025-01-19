@@ -1,0 +1,58 @@
+public class Codec {
+    public String serialize(TreeNode root) {
+        if(root==null) return "null";
+
+        StringBuilder sb = new StringBuilder();
+        fs(root, sb);
+        return sb.toString();
+    }
+    
+    //Do a Pre Order Traversal and put nodes values
+    //to StringBuilder as Strings
+    public static void fs(TreeNode root, StringBuilder sb){
+        //Base Case
+        if(root==null) {
+            sb.append("null,");
+            return;
+        }
+        //Main Logic
+        sb.append(root.val).append(",");
+        fs(root.left,sb);
+        fs(root.right,sb);
+    }
+    
+    //Use linked list and store comma 
+    //delimited nodes details in it
+    public TreeNode deserialize(String data) {
+        if(data.equals("null")) return null;
+
+        LinkedList<String> ll = new LinkedList<>();
+        for(String s: data.split(",")){
+            ll.add(s);
+        }
+
+        TreeNode root = ds(ll);
+        return root;
+    }
+    
+    //with the help of LinkedList , construct'
+    // a Binaryy Tree 
+    public static TreeNode ds(LinkedList<String> ll) {
+        //Base
+        if(ll.size()==0) {
+            return null;
+        }
+        //Main
+        String val = ll.removeFirst();
+        if (val.equals("null")) return null;
+        TreeNode root = new TreeNode(Integer.parseInt(val));
+        root.left = ds(ll);
+        root.right=ds(ll);
+
+        return root;
+    }
+}
+
+//TC: O(N) SC: O(N) 
+
+
