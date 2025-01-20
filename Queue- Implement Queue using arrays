@@ -1,0 +1,33 @@
+class MyQueue {
+
+    int front, rear;
+    int arr[] = new int[100005];  // Array to store elements
+
+    MyQueue() {
+        front = 0;
+        rear = 0;
+    }
+
+    // Function to push an element x in a queue.
+    void push(int x) {
+        // Check if the queue is full
+        if ((rear + 1) % 100005 == front) {
+            return;  // Queue is full, cannot push
+        }
+
+        arr[rear] = x;
+        rear = (rear + 1) % 100005;  // Increment rear with wrap-around
+    }
+
+    // Function to pop an element from the queue and return that element.
+    int pop() {
+        if (front == rear) {
+            return -1;  // Queue is empty
+        }
+
+        int ele = arr[front];
+        front = (front + 1) % 100005;  // Increment front with wrap-around
+        return ele;
+    }
+}
+
