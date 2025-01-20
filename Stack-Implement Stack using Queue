@@ -1,0 +1,35 @@
+//Using 1 queue:
+class MyStack {
+    Queue<Integer> que;
+    public MyStack() {
+        que = new LinkedList<>();
+    }
+    
+    public void push(int x) {
+        if(que.size()==0) {
+            que.offer(x);
+            return;
+        }
+        else{
+            //add the element
+            que.offer(x);
+            //make the recently added ele to appear
+            //in the front of the queue
+            for(int i=0;i<que.size()-1;i++) {
+                que.offer(que.poll());
+            }
+        }
+    }
+    
+    public int pop() {
+        return que.poll();
+    }
+    
+    public int top() {
+        return que.peek();
+    }
+    
+    public boolean empty() {
+        return que.isEmpty();
+    }
+}
