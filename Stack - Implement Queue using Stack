@@ -1,0 +1,31 @@
+class MyQueue {
+    Stack<Integer> stk;
+    Stack<Integer> tmp;
+    public MyQueue() {
+        stk = new Stack<>();
+        tmp = new Stack<>();
+    }
+    
+    public void push(int x) {
+        while(tmp.size()!=0) {
+            stk.push(tmp.pop());
+        }
+        stk.push(x);
+        while(stk.size()!=0) {
+            tmp.push(stk.pop());
+        }
+    }
+    
+    public int pop() {
+        return tmp.pop();
+    }
+    
+    public int peek() {
+        return tmp.peek();
+    }
+    
+    public boolean empty() {
+        return tmp.isEmpty();
+    }
+}
+
