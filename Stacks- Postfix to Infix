@@ -1,0 +1,24 @@
+class Solution {
+    static String postToInfix(String exp) {
+        Stack<String> stk = new Stack<>();
+        for(int i=0;i<exp.length();i++) {
+            Character curChar = (Character)exp.charAt(i);
+            //if curChar is operand, just push it to stack
+            if(curChar>='A'&&curChar<='Z' ||curChar>='a'&&curChar<='z') {
+                stk.push(curChar.toString());
+            }
+            else{
+                String s1 = stk.pop();
+                String s2 = stk.pop();
+                //cover them with '(' and ')'
+                //S2 operator S1
+                String s3 = "("+s2+curChar.toString()+s1+")";
+                //push this string to stack 
+                stk.push(s3);
+            }
+        }
+        //At last stack will have only 
+        //1 ele, return it 
+        return stk.pop();
+    }
+}
