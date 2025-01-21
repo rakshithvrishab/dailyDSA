@@ -1,0 +1,24 @@
+class Solution {
+    static String preToInfix(String s) {
+        Stack<String> stk = new Stack<>();
+        //read the string in reverse order
+        for(int i=s.length()-1;i>=0;i--) {
+            Character curChar = s.charAt(i);
+            
+            if(curChar>='A'&&curChar<='Z'||curChar>='a'&&curChar<='z'){
+                stk.push(curChar.toString());
+            }else{
+                //opposite to postfix to infix
+                //we first append s1 then operator
+                //and then s2 
+                String s1 = stk.pop();
+                String s2 = stk.pop();
+                String s3 = "("+s1+curChar.toString()+s2+")";
+                
+                stk.push(s3);
+            }
+        }
+        return stk.peek();
+    }
+}
+
