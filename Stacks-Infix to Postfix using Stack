@@ -1,0 +1,73 @@
+class Solution {
+    // Function to convert an infix expression to a postfix expression.
+    public static String infixToPostfix(String s) {
+        Stack<Character> stk = new Stack<>();
+        
+        //operator precedence
+        HashMap<Character,Integer> hm = new HashMap<>();
+        hm.put('^',3);
+        hm.put('/',2);
+        hm.put('*',2);
+        hm.put('+',1);
+        hm.put('-',1);
+        hm.put('(',0);
+        hm.put(')',0);
+        
+        StringBuilder sb = new StringBuilder();
+        
+        for(int i=0;i<s.length();i++) {
+            Character curChar = (Character)s.charAt(i);
+            //If character is Operand i,e
+            //A-Z or a-z or 0-9, just append it to sb 
+            if(curChar>='A' && curChar<='Z'||curChar>='a' && curChar<='z'||
+            curChar>='0' && curChar<='9'){
+                sb.append(curChar);
+                continue;
+            }
+            
+            else{ //If cur char is an operator 
+                //is stk is empty or cur char has greater prededence
+                //than top of stack, then blindly push 
+                if(stk.size()==0 || hm.get(stk.peek())<hm.get(curChar)){
+                    stk.push(curChar);
+                    continue;
+                }
+                //if cur char is bracket
+                else if(curChar=='(' || curChar==')') {
+                    // if '(' , blindly push to stk 
+                    if(curChar=='('){
+                        stk.push(curChar);
+                        continue;
+                    }
+                    // if ')' , keep on popping stk
+                    //and append to sb, until we find '('
+                    else{
+                        while(stk.peek()!='('){
+                            sb.append(stk.pop());
+                        }
+                        stk.pop(); //pop exisiting '('
+                        continue;
+                    }
+                }
+                //If stk top precedence is greater then cur char,
+                //keep on popping and appending it to sb, until
+                //we find stk top precedence less than cur char 
+                else if(hm.get(stk.peek())>=hm.get(curChar)){
+                    while(stk.size()!=0 && hm.get(stk.peek())>=hm.get(curChar)){
+                        sb.append(stk.pop());
+                    }
+                    stk.push(curChar);
+                }
+            }
+        }
+        //if stack has operators still, 
+        //keep on popping them and appending
+        //them to sb 
+        while(stk.size()!=0) {
+            sb.append(stk.pop());
+        }
+        
+        return sb.toString();
+    }
+}
+
