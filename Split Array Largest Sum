@@ -11,8 +11,7 @@ class Solution {
             sum+=x;
             max = Math.max(max , x);
         }
-        if(n==k) return max; //if k==number of array elements, just return max
-        
+        if(n==k) return max; //if k==number of array elements, just return max  
         int ans=0;
         int L = max;
         int R = sum;
