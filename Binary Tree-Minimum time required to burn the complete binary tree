@@ -1,5 +1,4 @@
 class Solution {
-
     public static int minTime(Node root, int tar) {
         // Step 1: Find parents of each node
         // remember hm<child, parent>, because child can have 
