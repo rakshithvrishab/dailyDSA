@@ -4,6 +4,7 @@ class Solution {
         int n = A.length;
         int R = n-1;
         int ans = Integer.MIN_VALUE;
+       
         while(L<R){
             int cur = Math.min(A[L],A[R]) * (R-L);
             ans = Math.max(cur,ans);
