@@ -1,0 +1,47 @@
+class Solution {
+    public TreeNode deleteNode(TreeNode root, int key) {
+        if(root==null) return null;
+        //If the root node itself
+        //is the node we need to delete
+        if(root.val==key){
+            return delNode(root);
+        }
+        
+        TreeNode cur = root;
+        while(cur!=null) {
+            if(key<cur.val) {
+                if(cur.left!=null && cur.left.val==key) {
+                    cur.left = delNode(cur.left);
+                    break;
+                }else{
+                    cur=cur.left;
+                }
+            }
+            else if(key>cur.val) {
+                if(cur.right!=null && cur.right.val==key) {
+                    cur.right = delNode(cur.right);
+                    break;
+                }else{
+                    cur=cur.right;
+                }
+            }
+        }
+        return root;
+    }
+
+    public static TreeNode delNode(TreeNode root) {
+        if(root.left==null) return root.right;
+        else if(root.right==null) return root.left;
+        TreeNode leftBST = root.left;
+        TreeNode rightBST = root.right;
+
+        //Find the extreme right in Left-BST
+        TreeNode extremeRight = leftBST;
+        while(extremeRight.right!=null) {
+            extremeRight=extremeRight.right;
+        }
+        extremeRight.right = rightBST;
+        return leftBST;
+    }
+}
+
