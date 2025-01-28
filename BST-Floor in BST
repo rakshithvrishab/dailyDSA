@@ -1,0 +1,29 @@
+    public static int floor(Node root, int x) {
+        if(root==null) return -1;
+        int[] ans=new int[1];
+        ans[0]=Integer.MIN_VALUE;
+        f(root,x,ans);
+        if(ans[0]==Integer.MIN_VALUE) return -1;
+        return ans[0];
+    }
+    
+    public static void f(Node root, int x, int[] ans) {
+        //Base
+        if(root==null) return;
+        //Main
+        if(root.data==x) {
+            ans[0] = root.data;
+            return;
+        }
+        if(root.data<x && root.data>ans[0]) {
+            ans[0] = root.data;
+        }
+        if(root.data > x) {
+            f(root.left,x,ans);
+        }
+        else if(root.data<x) {
+            f(root.right,x,ans);
+        }
+    }
+}
+
