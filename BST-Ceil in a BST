@@ -1,0 +1,33 @@
+class Tree {
+    int findCeil(Node root, int key) {
+        if (root == null) return -1;
+        int[] ans = new int[1];
+        ans[0] = Integer.MAX_VALUE;
+        f(root,key,ans);
+        //incase we did not find the ceil, return -1
+        if(ans[0]==Integer.MAX_VALUE) return -1;
+        return ans[0];
+    }
+    
+    
+    public static void f(Node root,int k, int[] ans) {
+        //Base Case
+        if(root==null) return;
+        //Main
+        if(root.data ==k ) {
+            ans[0] = root.data;
+            return;
+        }
+        
+        if(root.data>k && root.data<ans[0]) {
+            ans[0] = root.data;
+        }
+        
+        if(k>root.data) {
+            f(root.right , k, ans);
+        }
+        else if(k<root.data) {
+            f(root.left, k, ans);
+        }
+    }
+}
