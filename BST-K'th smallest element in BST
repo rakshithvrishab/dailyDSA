@@ -1,0 +1,31 @@
+class Solution {
+    private int count = 0;
+    private int result = 0;
+
+    public int kthSmallest(TreeNode root, int k) {
+        // Start in-order traversal
+        inorder(root, k);
+        return result;
+    }
+
+    private void inorder(TreeNode node, int k) {
+        // Base case: if node is null, return
+        if (node == null) {
+            return;
+        }
+        
+        // Traverse left subtree
+        inorder(node.left, k);
+        
+        // Process the current node
+        count++;
+        if (count == k) {
+            result = node.val;
+            return; // As soon as we find the kth smallest, return early
+        }
+        
+        // Traverse right subtree
+        inorder(node.right, k);
+    }
+}
+
