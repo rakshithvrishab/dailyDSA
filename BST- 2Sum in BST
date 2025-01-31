@@ -1,0 +1,39 @@
+class Solution {    
+    public boolean findTarget(TreeNode root, int k) {
+        return dfs(root, root, k);
+    }
+
+    private boolean dfs(TreeNode root, TreeNode cur, int target) {
+        if (cur == null) {
+            return false;
+        }
+
+        // Check if there is a pair whose sum equals the target
+        if (exists(root, cur, target - cur.val)) {
+            return true;
+        }
+
+        // Continue searching in the left and right subtrees
+        return dfs(root, cur.left, target)||dfs(root, cur.right, target);
+    }
+
+    private boolean exists(TreeNode root, TreeNode cur, int target) {
+        if (root == null) {
+            return false;
+        }
+
+        // Avoid checking the same node by comparing 
+        //the root and the current node
+        if (root.val == target && root != cur) {
+            return true;
+        }
+
+        // Traverse the tree based on BST properties
+        if (root.val < target) {
+            return exists(root.right, cur, target);
+        } else {
+            return exists(root.left, cur, target);
+        }
+    }
+}
+
