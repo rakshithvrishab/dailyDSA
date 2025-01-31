@@ -1,0 +1,39 @@
+class Solution {
+    public void recoverTree(TreeNode root) {
+        TreeNode[] first = new TreeNode[1];  
+        TreeNode[] second = new TreeNode[1]; 
+        TreeNode[] prev = new TreeNode[1];
+
+        f(root,first,second, prev);
+
+        if(first[0]!=null && second[0]!=null) {
+            int tmp = first[0].val;
+            first[0].val=second[0].val;
+            second[0].val=tmp;
+        }
+    }
+
+    public static void f(TreeNode root,TreeNode[] f,TreeNode[] s,TreeNode[] p) {
+        //Base
+        if(root==null) return;
+
+        f(root.left,f,s,p); //bcz inorder traversal
+
+        if(p[0]!=null && p[0].val>root.val) {
+            if(f[0]==null) {
+                //Violation happened for 1st time
+                //Update first and second assuming
+                //this might be adjacent swaps
+                f[0]=p[0];
+                s[0]=root;
+            }else{
+                //Violation happened for 2nd time
+                //update second
+                s[0]=root;
+            }
+        }
+
+        p[0]=root;
+        f(root.right,f,s,p); //bcz inorder traversal
+    }
+}
