@@ -1,0 +1,47 @@
+class Solution {
+    static int largestBst(Node root) {
+        return f(root).size;
+    }
+
+	//Post Order Traverse
+    private static NodeInfo f(Node root) {
+        if (root == null) {
+            return new NodeInfo(Integer.MAX_VALUE, Integer.MIN_VALUE, 0);
+        }
+
+        // Change variable names to LST and RST for left and right subtrees
+        NodeInfo LST = f(root.left);  // Left SubTree
+        NodeInfo RST = f(root.right); // Right SubTree
+
+        if (LST.max < root.data && root.data < RST.min) {
+            // If it's a valid BST, return the 
+            //size as 1 + LST.size + RST.size
+            return new NodeInfo(
+                Math.min(root.data, LST.min), // smallest value in this subtree
+                Math.max(root.data, RST.max), // largest value in this subtree
+                1 + LST.size + RST.size // total size of this BST subtree
+            );
+        } else {
+            // If it's not a valid BST, return the maximum size 
+            //of the LST or RST subtree
+            return new NodeInfo(
+                Integer.MIN_VALUE, // invalid left largest
+                Integer.MAX_VALUE, // invalid right smallest
+                Math.max(LST.size, RST.size) // largest BST size from either side
+            );
+        }
+    }
+
+    // Helper class to store information about the current subtree
+    static class NodeInfo {
+        int min, max, size;
+
+        NodeInfo(int min, int max, int size) {
+            this.min = min;
+            this.max = max;
+            this.size = size;
+        }
+    }
+}
+
+
