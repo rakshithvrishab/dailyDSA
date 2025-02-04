@@ -1,0 +1,40 @@
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if(head==null || head.next==null||k==1) return head;
+        return f(head,k);
+    }
+    public static ListNode f(ListNode head , int k) {
+        //Base Case
+        if(head==null) return null;
+        ListNode point= head;
+        //find size of the list
+        int size = 0;
+        while(point!=null) {
+            point=point.next;
+            ++size;
+        }
+        //if size is less than k
+        //just return head 
+        if(size<k) return head;
+
+        //Main
+        ListNode prev=null;
+        ListNode cur=head;
+        ListNode nxt = cur.next;
+        int i=0;
+        while(i<k) {
+            cur.next = prev;
+            prev=cur;
+            cur=nxt;
+            if(nxt!=null){
+                nxt=nxt.next;
+            }
+            ++i;
+        }
+        //head will go to the last when reversed
+        //so head's next will be the upcoming
+        //reversed list 
+        head.next = f(cur,k);
+        return prev;
+    }
+}
