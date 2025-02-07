@@ -6,7 +6,6 @@ class Solution {
         if(A==null && B==null) return true;
         if(A==null || B==null) return false;
         if(A.val!=B.val) return false;
-
         return (f(A.left,B.left) && f(A.right,B.right));
     }
 }
