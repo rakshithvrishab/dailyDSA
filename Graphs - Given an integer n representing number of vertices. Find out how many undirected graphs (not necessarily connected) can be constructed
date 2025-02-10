@@ -1,0 +1,17 @@
+class Solution {
+    static long count(int n) {
+        return (long) Math.pow(2,(n * (n - 1)) / 2);
+    }
+}
+
+Logic:
+•	In an undirected graph with ‘n’ vertices, each vertex can be connected to every other vertex 
+	except itself, which gives us ‘n−1’ possible edges.
+•	we have to consider that each edge is counted twice (once for each endpoint vertex) and 
+	that we don't count self-loops (edges from a vertex to itself).
+•	So, for each vertex, there are n−1 possible edges, but we divide by 2 to avoid counting each edge twice. 
+	Therefore there will be n(n-1)/2 distinct pair of vertices.
+•	Also, You can calculate the number of possible undirected graphs for a given number of vertices 
+	‘n’ using the formula 2^n(n−1)/2. This formula comes from the fact that for each pair of vertices, 
+	there can either be an edge between them or not, resulting in 2 possibilities. Since there are n(n−1)/2 
+	such pairs of vertices in an undirected graph, you raise 2 to this power to get the total number of possible graphs.
