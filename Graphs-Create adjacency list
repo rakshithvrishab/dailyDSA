@@ -1,0 +1,22 @@
+class Solution {
+    public List<List<Integer>> printGraph(int V, int edges[][]) {
+        List<List<Integer>> adjList = new ArrayList<>();
+
+        // Initialize the adjacency list with empty lists for each vertex
+        for (int i = 0; i < V; i++) {
+            adjList.add(new ArrayList<>());
+        }
+
+        // Populate the adjacency list based on the given edges
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+
+            // Since it's an undirected graph, add edges in both directions
+            adjList.get(u).add(v);
+            adjList.get(v).add(u);
+        }
+
+        return adjList;
+    }
+}
