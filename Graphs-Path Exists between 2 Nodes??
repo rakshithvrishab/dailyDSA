@@ -1,0 +1,43 @@
+
+public class Solution {
+    public int solve(int A, int[][] B) {
+        ArrayList<Integer>[] adjList = new ArrayList[A+1];
+        for(int i=0;i<adjList.length;i++) {
+            adjList[i] = new ArrayList<>();
+        }
+
+        //create adj adj List
+        for(int i=0;i<B.length;i++) {
+            int src = B[i][0];
+            int dest = B[i][1];
+            adjList[src].add(dest);
+        }
+
+        //Do a BFS Traversal
+        Queue<Integer> que = new LinkedList<>();
+        boolean[] vis = new boolean[A+1];
+        Arrays.fill(vis,false);
+
+        que.offer(1);
+        vis[1]=true;
+
+        while(que.size()!=0) {
+            int cur = que.poll();
+            for(int x:adjList[cur]) {
+                if(vis[x]==false) {
+                    que.offer(x);
+                    vis[x]=true;
+                }
+            }
+        }
+        if(vis[A]==true) return 1;
+        return 0;
+    }
+}
+
+
+Time Complexity=O(V+E)
+Where:
+•	V is the number of vertices (nodes).
+•	E is the number of edges.
+Space Complexity=O(V+E)
