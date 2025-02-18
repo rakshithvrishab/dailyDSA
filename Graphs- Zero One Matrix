@@ -1,0 +1,63 @@
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+        int[][] res = new int[m][n];
+        for(int[] rw:res){  //fill res with -1 to track vis
+            Arrays.fill(rw,-1);
+        }
+        Queue<rowCol> que = new LinkedList<>();
+
+        //we start BFS from cells where there are 0 simultaneously
+        //hence add all the cells with 0 to the queue
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(mat[i][j]==0){
+                    res[i][j]=0; //shortest dist from 0 to itself is 0 only
+                    que.offer(new rowCol(i,j));
+                }
+            }
+        }
+
+        while(que.size()!=0){
+            int len=que.size();
+            for(int i=0;i<len;i++){
+                rowCol cur = que.poll();
+                int curR=cur.r;
+                int curC=cur.c;
+
+                //look for 4 directions WRT curR and curC
+                //Left
+                if(curC-1>=0 && res[curR][curC-1]==-1) {
+                    que.offer(new rowCol(curR , curC-1));
+                    res[curR][curC-1] = res[curR][curC]+1;
+                }
+                //Up
+                if(curR-1>=0 && res[curR-1][curC]==-1) {
+                    que.offer(new rowCol(curR-1 , curC));
+                    res[curR-1][curC] = res[curR][curC]+1;
+                }
+                //Right
+                if(curC+1<n && res[curR][curC+1]==-1) {
+                    que.offer(new rowCol(curR , curC+1));
+                    res[curR][curC+1] = res[curR][curC]+1;
+                }
+                //Down
+                if(curR+1<m && res[curR+1][curC]==-1) {
+                    que.offer(new rowCol(curR+1 , curC));
+                    res[curR+1][curC] = res[curR][curC]+1;
+                }
+            }
+        }
+        return res;
+    }
+
+    public static class rowCol{
+        int r;
+        int c;
+        public rowCol(int x,int y){
+            this.r = x;
+            this.c = y;
+        }
+    }
+}
