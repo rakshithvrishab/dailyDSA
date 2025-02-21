@@ -1,0 +1,55 @@
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        int v = graph.length;
+        
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for(int i=0;i<v;i++) {
+            adj.add(new ArrayList<>());
+        }
+        //step1: reverse adj list
+        for(int i=0;i<v;i++) {
+            for(int x: graph[i]) {
+                adj.get(x).add(i);
+            }
+        }
+
+        //step2: find in-degree for all the nodes
+        int[] inDeg = new int[v];
+        for(ArrayList<Integer> neighbours : adj) {
+            for(int x:neighbours) {
+                ++inDeg[x];
+            }
+        }
+
+        //step3: start KAHN's BFS topological sort
+        //this stays off from cycles and traverse only non cyclic path
+        //which lead to terminals
+        List<Integer> topoSort = new ArrayList<>();
+        Queue<Integer> que = new LinkedList<>();
+        for(int i=0;i<v;i++) {
+            if(inDeg[i]==0) {
+                que.offer(i);
+            }
+        }
+
+        while(que.size()!=0) {
+            int cur = que.poll();
+            topoSort.add(cur);
+
+            for(int x: adj.get(cur)) {
+                --inDeg[x];
+                if(inDeg[x]==0) {
+                    que.offer(x);
+                }
+            }
+        }
+
+        //answer has all the safe nodes
+        //it is asked to return answer in ascending order
+        Collections.sort(topoSort);
+        return topoSort;
+    }
+}
+//TC: TC of the solution is dominated by the topological sorting step
+//	O(V+E+VlogV)
+//SC: O(V+E)
