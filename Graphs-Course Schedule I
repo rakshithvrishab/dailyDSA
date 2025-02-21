@@ -1,0 +1,67 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
+class Solution {
+    public boolean canFinish(int n, int[][] prerequisites) {
+        // Construct adjacency list
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+        
+        // Fill the adjacency list based on the prerequisites
+        for (int[] arr : prerequisites) {
+            // arr[1] -> arr[0] (pre-requisite relationship)
+            adj.get(arr[1]).add(arr[0]); 
+        }
+
+        // Create visited array and path-visiting array
+        boolean[] vis = new boolean[n];
+        Arrays.fill(vis, false);  
+        boolean[] pathVis = new boolean[n];
+        Arrays.fill(pathVis, false);  
+
+        // Start DFS to detect cycles
+        for (int i = 0; i < n; i++) {
+            if (vis[i]==false) { // If the course is not visited yet
+                if (dfs(adj, vis, pathVis, i)) {
+                    // Cycle detected, cannot finish all courses
+                    return false; 
+                }
+            }
+        }
+        return true; // No cycles detected, can finish all courses
+    }
+
+    // DFS helper function to detect cycles
+    public static boolean dfs(ArrayList<ArrayList<Integer>> adj, 
+    boolean[] vis, boolean[] pathVis, int src) {
+        // If the node is already in the 
+        //current DFS path, a cycle is detected
+        if (pathVis[src]) {
+            return true; // Cycle detected
+        }
+
+        // If the node is already fully processed, 
+        //no need to explore it again
+        if (vis[src]) {
+            return false; // No cycle detected from this node
+        }
+
+        // Mark the node as visited and part of the current DFS path
+        vis[src] = true;
+        pathVis[src] = true;
+
+        // Explore all adjacent nodes (courses that depend on the current course)
+        for (int x : adj.get(src)) {
+            if (dfs(adj, vis, pathVis, x)) {
+                return true; // Cycle detected in the DFS tree
+            }
+        }
+
+        // Backtrack: remove the node from the current recursion path
+        pathVis[src] = false;
+        return false; // No cycle detected from this node
+    }
+}
+
