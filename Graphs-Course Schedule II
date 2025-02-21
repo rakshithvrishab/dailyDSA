@@ -1,0 +1,69 @@
+import java.util.*;
+
+class Solution {
+    public int[] findOrder(int n, int[][] prerequisites) {
+        // Adjacency list to represent the graph
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        // Fill the adjacency list based on the prerequisites
+        for (int[] arr : prerequisites) {
+            adj.get(arr[1]).add(arr[0]); // arr[1] -> arr[0]
+        }
+
+        boolean[] visited = new boolean[n];   // To mark fully processed nodes
+        boolean[] pathVisited = new boolean[n];  // To mark nodes in the current DFS path
+        Stack<Integer> stack = new Stack<>(); // To store the topological order
+
+        // Try to perform DFS for all nodes
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                if (dfs(adj, pathVisited, visited, stack, i)) {
+                    return new int[0]; // Cycle detected, return empty array
+                }
+            }
+        }
+
+        // Convert the stack to an array
+        int[] result = new int[stack.size()];
+        int index = 0;
+        while (!stack.isEmpty()) {
+            result[index++] = stack.pop();
+        }
+
+        return result;
+    }
+
+    // DFS helper function with cycle detection
+    private boolean dfs(ArrayList<ArrayList<Integer>> adj, boolean[] pathVisited, 
+    boolean[] visited, Stack<Integer> stack, int node) {
+        if (pathVisited[node]) {
+            return true; // Cycle detected
+        }
+
+        if (visited[node]) {
+            return false; // Already processed, no cycle
+        }
+
+        // Mark the node as being visited in the current DFS path
+        pathVisited[node] = true;
+        visited[node] = true;
+        // Recurse for all neighbors
+        for (int neighbor : adj.get(node)) {
+            if (dfs(adj, pathVisited, visited, stack, neighbor)) {
+                return true; // Cycle detected in the neighbor's DFS
+            }
+        }
+
+        // After processing all neighbors, mark this node as fully visited
+        pathVisited[node] = false;
+
+        // Push the node to the stack to represent topological order
+        stack.push(node);
+
+        return false;
+    }
+}
+
