@@ -1,0 +1,103 @@
+
+class Solution {
+    public String findOrder(String[] words) {
+        // Step 1: Find all unique characters
+        HashSet<Character> hs = new HashSet<>();
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
+                hs.add(c);
+            }
+        }
+
+        // Step 2: Create a mapping from character to index
+        HashMap<Character, Integer> charToIndex = new HashMap<>();
+        int index = 0;
+        for (char c : hs) {
+            charToIndex.put(c, index++);
+        }
+
+        // Step 3: Initialize adjacency list and visited states
+        int v = hs.size();
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < v; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        // Step 4: Build the graph (edges between characters)
+        for (int ptr1 = 0, ptr2 = 1; ptr2 < words.length; ptr1++, ptr2++) {
+            String s1 = words[ptr1];
+            String s2 = words[ptr2];
+            int len = Math.min(s1.length(), s2.length());
+
+            for (int j = 0; j < len; j++) {
+                if (s1.charAt(j) != s2.charAt(j)) {
+                    // Add an edge from s1[j] -> s2[j]
+                    adj.get(charToIndex.get(s1.charAt(j))).add(charToIndex.get(s2.charAt(j)));
+                    break; // Stop at the first mismatch
+                }
+            }
+
+            // Handle the case where s1 is a prefix of s2
+            if (s1.length() > s2.length() && s1.startsWith(s2)) {
+                return ""; // Invalid order if a word is a prefix of another but appears later
+            }
+        }
+
+        // Step 5: Perform DFS for topological sorting and cycle detection
+        int[] vis = new int[v]; // 0: unvisited, 1: visiting, 2: visited
+        int[] pathVis = new int[v]; // 0: not in current path, 1: in current path
+        StringBuilder sb = new StringBuilder();
+
+        // DFS for each unvisited node
+        for (int j = 0; j < v; j++) {
+            if (vis[j] == 0) {
+                if (dfs(adj, vis, pathVis, sb, j, charToIndex)) {
+                    return ""; // Cycle detected, no valid order
+                }
+            }
+        }
+
+        // Step 6: Reverse the result to get the correct topological order
+        return sb.reverse().toString();
+    }
+
+    // DFS helper function
+    private boolean dfs(ArrayList<ArrayList<Integer>> adj, int[] vis, int[] pathVis, 
+    StringBuilder sb, int src, HashMap<Character, Integer> charToIndex) {
+        // Cycle detection: if we encounter a node that is 
+        //already in the current recursion stack
+        if (pathVis[src] == 1) {
+            return true; // Cycle found
+        }
+
+        // If the node is already visited, no need to visit again
+        if (vis[src] == 2) {
+            return false;
+        }
+
+        // Mark the node as visiting
+        vis[src] = 1;
+        pathVis[src] = 1;
+
+        // Visit all the adjacent nodes
+        for (int neighbor : adj.get(src)) {
+            if (dfs(adj, vis, pathVis, sb, neighbor, charToIndex)) {
+                return true; // Cycle found in a neighbor
+            }
+        }
+
+        // Mark the node as fully visited
+        vis[src] = 2;
+        pathVis[src] = 0;
+
+        // Append the character to the result in post-order
+        for (Map.Entry<Character, Integer> entry : charToIndex.entrySet()) {
+            if (entry.getValue() == src) {
+                sb.append(entry.getKey());
+                break;
+            }
+        }
+        return false;
+    }
+}
+
