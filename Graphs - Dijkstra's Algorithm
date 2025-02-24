@@ -1,0 +1,54 @@
+/*
+class iPair {
+    int first, second;
+
+    iPair(int first, int second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+*/
+
+// User function Template for Java
+class Solution {
+    ArrayList<Integer> dijkstra(ArrayList<ArrayList<iPair>> adj, int src) {
+        int n = adj.size();  // number of vertices in the graph
+        
+        // Distance array initialized to infinity
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);  // Initially, all distances are infinite
+        dist[src] = 0;  // Distance from the source to itself is 0
+        
+        // Min-heap (priority queue) to select the vertex with the smallest distance
+        PriorityQueue<iPair> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.second, b.second));
+        pq.add(new iPair(src, 0));  // Push the source vertex with distance 0
+        
+        // Dijkstra's algorithm loop
+        while (!pq.isEmpty()) {
+            // Extract vertex with the minimum distance
+            iPair current = pq.poll();
+            int u = current.first;  // current vertex
+            int currentDist = current.second;  // current minimum distance
+
+            // Explore all neighbors of u
+            for (iPair neighbor : adj.get(u)) {
+                int v = neighbor.first;  // neighbor vertex
+                int weight = neighbor.second;  // edge weight
+                
+                // If a shorter path to v is found, update the distance and push v into the priority queue
+                if (dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                    pq.add(new iPair(v, dist[v]));
+                }
+            }
+        }
+        
+        // Convert the result into an ArrayList and return
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            result.add(dist[i]);
+        }
+        return result;
+    }
+}
+
