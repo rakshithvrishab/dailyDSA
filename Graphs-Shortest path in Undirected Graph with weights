@@ -1,0 +1,36 @@
+class Solution {
+    // Function to find the shortest path from a source node to all other nodes
+    public int[] shortestPath(ArrayList<ArrayList<Integer>> adj, int src) {
+        int v = adj.size();
+        int[] dist = new int[v];
+        Arrays.fill(dist , -1);
+        
+        //BFS
+        Queue<Pair> que = new LinkedList<>();
+        que.offer(new Pair(src , 0)); //dist from src to src is 0
+        dist[src] = 0;
+        
+        while(que.size()!=0) {
+            Pair cur = que.poll();
+            int curVert = cur.vert;
+            int curDist = cur.dist;
+            
+            for(int x:adj.get(curVert)) {
+                if(dist[x]==-1) {
+                    que.offer(new Pair(x , curDist+1));
+                    dist[x] = curDist+1;
+                }
+            }
+        }
+        return dist;
+    }
+    
+    static class Pair{
+        int vert;
+        int dist;
+        Pair(int v, int d) {
+            vert = v;
+            dist = d;
+        }
+    }
+}
