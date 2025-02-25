@@ -1,0 +1,80 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Solution {
+    public int shortestPathBinaryMatrix(int[][] A) {
+        int n = A.length;
+        if (A[0][0] == 1 || A[n - 1][n - 1] == 1) return -1;
+
+        Queue<Triple> que = new LinkedList<>();
+        A[0][0] = 2; // mark as visited
+        que.offer(new Triple(0, 0, 1)); // start distance at 1
+
+        while (que.size() != 0) {
+            Triple cur = que.poll();
+            int curRow = cur.row;
+            int curCol = cur.col;
+            int curDist = cur.dist;
+
+            if (curRow == n - 1 && curCol == n - 1) {
+                return curDist; // return the distance
+            }
+
+            // left
+            if (curCol - 1 >= 0 && A[curRow][curCol - 1] == 0) {
+                que.offer(new Triple(curRow, curCol - 1, curDist + 1));
+                A[curRow][curCol - 1] = 2; // mark as visited
+            }
+            // up-left
+            if (curCol - 1 >= 0 && curRow - 1 >= 0 && A[curRow - 1][curCol - 1] == 0) {
+                que.offer(new Triple(curRow - 1, curCol - 1, curDist + 1));
+                A[curRow - 1][curCol - 1] = 2;
+            }
+            // up
+            if (curRow - 1 >= 0 && A[curRow - 1][curCol] == 0) {
+                que.offer(new Triple(curRow - 1, curCol, curDist + 1));
+                A[curRow - 1][curCol] = 2;
+            }
+            // up-right
+            if (curCol + 1 < n && curRow - 1 >= 0 && A[curRow - 1][curCol + 1] == 0) {
+                que.offer(new Triple(curRow - 1, curCol + 1, curDist + 1));
+                A[curRow - 1][curCol + 1] = 2;
+            }
+            // right
+            if (curCol + 1 < n && A[curRow][curCol + 1] == 0) {
+                que.offer(new Triple(curRow, curCol + 1, curDist + 1));
+                A[curRow][curCol + 1] = 2;
+            }
+            // right-down
+            if (curCol + 1 < n && curRow + 1 < n && A[curRow + 1][curCol + 1] == 0) {
+                que.offer(new Triple(curRow + 1, curCol + 1, curDist + 1));
+                A[curRow + 1][curCol + 1] = 2;
+            }
+            // down
+            if (curRow + 1 < n && A[curRow + 1][curCol] == 0) {
+                que.offer(new Triple(curRow + 1, curCol, curDist + 1));
+                A[curRow + 1][curCol] = 2;
+            }
+            // down-left
+            if (curCol - 1 >= 0 && curRow + 1 < n && A[curRow + 1][curCol - 1] == 0) {
+                que.offer(new Triple(curRow + 1, curCol - 1, curDist + 1));
+                A[curRow + 1][curCol - 1] = 2;
+            }
+        }
+
+        return -1;
+    }
+
+    static class Triple {
+        int row;
+        int col;
+        int dist;
+
+        Triple(int r, int c, int d) {
+            row = r;
+            col = c;
+            dist = d;
+        }
+    }
+}
+
