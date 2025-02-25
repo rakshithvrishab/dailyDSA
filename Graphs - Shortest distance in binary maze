@@ -1,0 +1,73 @@
+class Solution {
+    int shortestPath(int[][] A, int[] src, int[] dst) {
+        
+        if(A[src[0]][src[1]]!=1 || A[dst[0]][dst[1]]!=1)return -1;
+        int m = A.length;
+        int n = A[0].length;
+        int[][] dist = new int[m][n];
+        for (int[] x : dist) {
+            Arrays.fill(x, Integer.MAX_VALUE);
+        }
+
+        Queue<Triple> queue = new LinkedList<>();
+        queue.offer(new Triple(src[0], src[1], 0));
+        dist[src[0]][src[1]] = 0;
+
+        while (!queue.isEmpty()) {
+            Triple cur = queue.poll();
+            int curRow = cur.row;
+            int curCol = cur.col;
+            int curDist = cur.dist;
+
+            if (curRow == dst[0] && curCol == dst[1]) {
+                return curDist;
+            }
+
+            // Up
+            if (curRow - 1 >= 0 && A[curRow - 1][curCol] == 1) {
+                if (curDist + 1 < dist[curRow - 1][curCol]) {
+                    dist[curRow - 1][curCol] = curDist + 1;
+                    queue.offer(new Triple(curRow - 1, curCol, curDist + 1));
+                }
+            }
+
+            // Down
+            if (curRow + 1 < m && A[curRow + 1][curCol] == 1) {
+                if (curDist + 1 < dist[curRow + 1][curCol]) {
+                    dist[curRow + 1][curCol] = curDist + 1;
+                    queue.offer(new Triple(curRow + 1, curCol, curDist + 1));
+                }
+            }
+
+            // Left
+            if (curCol - 1 >= 0 && A[curRow][curCol - 1] == 1) {
+                if (curDist + 1 < dist[curRow][curCol - 1]) {
+                    dist[curRow][curCol - 1] = curDist + 1;
+                    queue.offer(new Triple(curRow, curCol - 1, curDist + 1));
+                }
+            }
+
+            // Right
+            if (curCol + 1 < n && A[curRow][curCol + 1] == 1) {
+                if (curDist + 1 < dist[curRow][curCol + 1]) {
+                    dist[curRow][curCol + 1] = curDist + 1;
+                    queue.offer(new Triple(curRow, curCol + 1, curDist + 1));
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    class Triple {
+        int row;
+        int col;
+        int dist;
+
+        Triple(int r, int c, int d) {
+            row = r;
+            col = c;
+            dist = d;
+        }
+    }
+}
