@@ -1,0 +1,37 @@
+class Solution {
+    int minimumMultiplications(int[] arr, int start, int end) {
+        //instead of dist[] array, we are using hm
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        hm.put(start, 0);
+        Queue<Integer> que = new LinkedList<>();
+        que.offer(start);
+
+        while (!que.isEmpty()) {
+            int cur = que.poll();
+            //steps to reach cur node
+            int curStep = hm.get(cur);
+
+            if (cur == end) {
+                return curStep;
+            }
+
+            for (int x : arr) {
+                int prod = (cur * x) % 100000;
+                //if dist[prod] is empty
+                if (!hm.containsKey(prod)) {
+                    hm.put(prod, curStep + 1);
+                    que.offer(prod);
+                } 
+                else {
+                    //if curStep+1 < dist[prod]
+                    if (curStep + 1 < hm.get(prod)) {
+                        hm.put(prod, curStep + 1);
+                        que.offer(prod);
+                    }
+                }
+            }
+        }
+
+        return hm.containsKey(end) ? hm.get(end) : -1;
+    }
+}
