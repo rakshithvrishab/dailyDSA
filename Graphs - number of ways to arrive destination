@@ -1,0 +1,59 @@
+import java.util.*;
+
+class Solution {
+    public int countPaths(int n, int[][] roads) {
+        int mod = 1000000007;
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (int[] x : roads) {
+            int start = x[0];
+            int end = x[1];
+            adj.get(start).add(new Pair(end, x[2]));
+            adj.get(end).add(new Pair(start, x[2])); // Add reverse edge for undirected graph.
+        }
+
+        int[] ways = new int[n];
+        Arrays.fill(ways, 0);
+        long[] dist = new long[n]; // Use long to prevent integer overflow
+        Arrays.fill(dist, Long.MAX_VALUE);
+
+        dist[0] = 0;
+        ways[0] = 1;
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> Long.compare(a.dist, b.dist));
+        pq.offer(new Pair(0, 0));
+
+        while (!pq.isEmpty()) {
+            Pair cur = pq.poll();
+            int curNode = cur.node;
+            long curDist = cur.dist;
+
+            for (Pair x : adj.get(curNode)) {
+                int adjNode = x.node;
+                long adjDist = x.dist;
+
+                if (dist[adjNode] > curDist + adjDist) {
+                    dist[adjNode] = curDist + adjDist;
+                    ways[adjNode] = ways[curNode];
+                    ways[adjNode] %= mod;
+                    pq.offer(new Pair(adjNode, dist[adjNode]));
+                } 
+                else if (dist[adjNode] == curDist + adjDist) {
+                    ways[adjNode] = (ways[adjNode] + ways[curNode]) % mod;
+                }
+            }
+        }
+        return ways[n - 1];
+    }
+
+    static class Pair {
+        int node;
+        long dist; // Use long for distance
+        Pair(int n, long d) {
+            node = n;
+            dist = d;
+        }
+    }
+}
+
