@@ -1,0 +1,47 @@
+class Solution {
+    static int[] bellmanFord(int V, int[][] edges, int src) {
+        int[] dist = new int[V];
+        Arrays.fill(dist , 100000000);
+        dist[src] = 0;
+        
+        //n-1 iterations to find all the 
+        //short distances from source node
+        for(int i=0;i<V-1;i++) { 
+            for(int[] x:edges) {
+                int start = x[0];
+                int end = x[1];
+                int newDist = x[2];
+                
+                //if dist[start] is not known yet
+                if(dist[start]==100000000) { 
+                    continue;
+                }else{
+                    if(dist[start]+newDist < dist[end]) {
+                        dist[end] = dist[start]+newDist;
+                    }
+                }
+            }
+        }
+        
+        //check for thr negative cycle by doing N'th iteration
+        for(int[] x:edges) {
+            int start = x[0];
+            int end = x[1];
+            int newDist = x[2];
+                
+            //if dist[start] is not known yet
+            if(dist[start]==100000000) { 
+                continue;
+            }else{
+                if(dist[start]+newDist < dist[end]) {
+                    //distance[end] is reducing
+                    //even after n-1 iterations
+                    //which means there is a negative cycle
+                    return new int[]{-1};
+                }
+            }    
+        }
+        return dist;
+    }
+}
+
