@@ -1,0 +1,43 @@
+class Solution {
+    public void shortestDistance(int[][] mat) {
+        int V = mat.length;
+
+        // Initialize the matrix for missing edges (-1) and set diagonal to 0
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (mat[i][j] == -1) {
+                    mat[i][j] = (int)1e9;  // No path
+                }
+                if (i == j) {
+                    mat[i][j] = 0;  // Distance to itself is 0
+                }
+            }
+        }
+
+        // Floyd-Warshall algorithm to compute shortest paths
+        for (int k = 0; k < V; k++) { // via node k
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    mat[i][j] = Math.min(mat[i][j], mat[i][k] + mat[k][j]);
+                }
+            }
+        }
+
+        // Check for negative weight cycles
+        for (int i = 0; i < V; i++) {
+            if (mat[i][i] < 0) {
+                System.out.println("Negative cycle detected involving vertex " + i);
+                return;  // If there's a negative cycle, we stop the execution.
+            }
+        }
+
+        // Convert unreachable paths (Integer.MAX_VALUE) back to -1
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (mat[i][j] == 1e9) {
+                    mat[i][j] = -1;
+                }
+            }
+        }
+    }
+}
