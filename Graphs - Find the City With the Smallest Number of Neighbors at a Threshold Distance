@@ -1,0 +1,52 @@
+import java.util.Arrays;
+
+class Solution {
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        int[][] dist = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(dist[i], (int) 1e9);
+            dist[i][i] = 0; // Initialize self-loops
+        }
+
+        for (int[] edge : edges) {
+            int src = edge[0];
+            int dest = edge[1];
+            int weight = edge[2];
+            dist[src][dest] = weight;
+            dist[dest][src] = weight;
+        }
+
+        // Floyd-Warshall Algorithm
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+                }
+            }
+        }
+
+        int minNeighbors = n;
+        int resultCity = -1;
+        
+        //for each city 'i', check how many
+        //neighboring cities are there within the 
+        //distance threshold
+        for (int i = 0; i < n; i++) {
+            int neighbors = 0;
+            for (int j = 0; j < n; j++) {
+                if (i != j && dist[i][j] <= distanceThreshold) {
+                    neighbors++;
+                }
+            }
+
+            if (neighbors <= minNeighbors) {
+                minNeighbors = neighbors;
+                resultCity = i;
+            }
+        }
+
+        return resultCity;
+    }
+}
+
+//TC: O(n ^ 3)  SC: O(n^2)
