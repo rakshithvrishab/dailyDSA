@@ -1,0 +1,87 @@
+class Solution {
+    static int spanningTree(int V, int E, List<List<int[]>> adj) {
+        
+        //instead if sorting on basis of weigts,
+        //we have used min heap
+        PriorityQueue<Triple> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.wt, b.wt));
+
+        for (int i = 0; i < adj.size(); i++) {
+            int src = i;
+            for (int[] x : adj.get(src)) {
+                int dest = x[0];
+                int weight = x[1];
+                pq.offer(new Triple(src, dest, weight));
+            }
+        }
+        DisjointSet dj = new DisjointSet(V);
+        int ansWeight = 0;
+
+        while (!pq.isEmpty()) {
+            Triple cur = pq.poll();
+            int u = cur.src;
+            int v = cur.dst;
+            int w = cur.wt;
+            // if they dont belong to same component,
+            //only then do join operation
+            if (dj.findParent(u) != dj.findParent(v)) { 
+                dj.join(u, v);
+                ansWeight += w;
+            }
+        }
+        return ansWeight;
+    }
+
+    static class Triple {
+        int src;
+        int dst;
+        int wt;
+
+        Triple(int s, int d, int w) {
+            src = s;
+            dst = d;
+            wt = w;
+        }
+    }
+}
+
+//DSU Data Structure
+class DisjointSet {
+    int n;
+    int[] par;
+    int[] sz;
+
+    DisjointSet(int size) {
+        n = size;
+        par = new int[n];
+        sz = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            par[i] = i;
+            sz[i] = 1;
+        }
+    }
+
+    public void join(int u, int v) {
+        int pU = findParent(u);
+        int pV = findParent(v);
+
+        
+        if (sz[pU] < sz[pV]) {
+            par[pU] = pV;
+            sz[pV] += sz[pU];
+        } 
+        else {
+            par[pV] = pU;
+            sz[pU] += sz[pV];
+        }
+        
+    }
+
+    public int findParent(int x) {
+        if (par[x] == x) {
+            return x;
+        }
+        return par[x] = findParent(par[x]);
+    }
+}
+
