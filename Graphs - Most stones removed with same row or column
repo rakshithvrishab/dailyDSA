@@ -1,0 +1,92 @@
+class Solution {
+    public int removeStones(int[][] stones) {
+        if(stones.length==1) {
+            return 0; //only 1 stone, can't remove
+        }
+        
+        //row col mapping
+        int i = 0;
+        HashMap<Integer,Integer> rowMap = new HashMap<>();
+        HashMap<Integer,Integer> colMap = new HashMap<>();
+        for(int[] x: stones) {
+            if(!rowMap.containsKey(x[0])) {
+                rowMap.put(x[0],i);
+                ++i;
+            }
+        }
+        for(int[] x: stones) {
+            if(!colMap.containsKey(x[1])) {
+                colMap.put(x[1],i);
+                ++i;
+            }
+        }
+
+        int totalNums = i;
+        //total stones
+        int totalStones = stones.length;
+
+        Disjoint dj = new Disjoint(totalNums);
+
+        for(int[] x: stones) {
+            int r = rowMap.get(x[0]);
+            int c = colMap.get(x[1]);
+
+            if(dj.findParent(r)!=dj.findParent(c)) {
+                dj.join(r,c);
+            }
+        }
+
+        //find total components 
+        int comp=0;
+        for(int k=0;k<totalNums;k++) {
+            if(dj.findParent(k)==k){
+                ++comp;
+            }           
+        }
+
+        //total stones - total components = total stones removed
+        return totalStones - comp;
+    }
+}
+
+class Disjoint {
+    int n;
+    public int[] par;
+    public int[] size;
+
+    Disjoint(int n) {
+        this.n = n;
+        par = new int[n];
+        size = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            par[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    public void join(int x, int y) {
+        int parX = findParent(x);
+        int parY = findParent(y);
+
+        if (parX == parY) {
+            return;
+        }
+
+        if (size[parX] > size[parY]) {
+            par[parY] = parX;
+            size[parX] += size[parY];
+        } else {
+            par[parX] = parY;
+            size[parY] += size[parX];
+        }
+    }
+
+    public int findParent(int x) {
+        if (par[x] == x) {
+            return x;
+        }
+        return par[x] = findParent(par[x]);
+    }
+}
+
