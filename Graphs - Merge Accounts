@@ -1,0 +1,103 @@
+class Solution {
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+        // Map to store email to its unique integer index
+        Map<String, Integer> emailToIndex = new HashMap<>();
+        // Map to store index back to email
+        Map<Integer, String> indexToEmail = new HashMap<>();
+        // Map to store email to its corresponding name
+        Map<String, String> emailToName = new HashMap<>();
+        int emailCount = 0; // Counter for unique emails
+
+        // Iterate through all accounts to populate the email mapping
+        for (List<String> account : accounts) {
+            String name = account.get(0); // Get the account name
+            // Iterate through emails in the account
+            for (int i = 1; i < account.size(); i++) {
+                String email = account.get(i);
+                // If email is not already mapped, add it to the maps
+                if (!emailToIndex.containsKey(email)) {
+                    emailToIndex.put(email, emailCount);
+                    indexToEmail.put(emailCount, email);
+                    emailToName.put(email, name);
+                    emailCount++;
+                }
+            }
+        }
+
+        // Initialize disjoint set with the number of unique emails
+        Disjoint dj = new Disjoint(emailCount);
+
+        // Iterate through accounts to perform union operations
+        for (List<String> account : accounts) {
+            int firstEmailIndex = emailToIndex.get(account.get(1)); // Get index of the first email
+            // Join all emails in the same account
+            for (int i = 2; i < account.size(); i++) {
+                int currentEmailIndex = emailToIndex.get(account.get(i));
+                dj.join(firstEmailIndex, currentEmailIndex);
+            }
+        }
+
+        // Map to store merged accounts (parent index to list of emails)
+        Map<Integer, List<String>> mergedAccounts = new HashMap<>();
+        // Iterate through all emails to group them by their parent
+        for (String email : emailToIndex.keySet()) {
+            int parent = dj.findParent(emailToIndex.get(email)); // Find parent of the email
+            mergedAccounts.computeIfAbsent(parent, k -> new ArrayList<>()).add(email); // Add email to the parent's list
+        }
+
+        // List to store the final result
+        List<List<String>> result = new ArrayList<>();
+        // Iterate through merged accounts to construct the result list
+        for (int parent : mergedAccounts.keySet()) {
+            List<String> emails = mergedAccounts.get(parent);
+            Collections.sort(emails); // Sort emails in the merged account
+            List<String> mergedAccount = new ArrayList<>();
+            mergedAccount.add(emailToName.get(emails.get(0))); // Add account name
+            mergedAccount.addAll(emails); // Add sorted emails
+            result.add(mergedAccount); // Add merged account to the result
+        }
+
+        return result; // Return the list of merged accounts
+    }
+}
+
+class Disjoint {
+    int n;
+    public int[] par;
+    public int[] size;
+
+    Disjoint(int n) {
+        this.n = n;
+        par = new int[n];
+        size = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            par[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    public void join(int x, int y) {
+        int parX = findParent(x);
+        int parY = findParent(y);
+
+        if (parX == parY) {
+            return;
+        }
+
+        if (size[parX] > size[parY]) {
+            par[parY] = parX;
+            size[parX] += size[parY];
+        } else {
+            par[parX] = parY;
+            size[parY] += size[parX];
+        }
+    }
+
+    public int findParent(int x) {
+        if (par[x] == x) {
+            return x;
+        }
+        return par[x] = findParent(par[x]);
+    }
+}
