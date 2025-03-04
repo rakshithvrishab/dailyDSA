@@ -1,0 +1,92 @@
+class Solution {
+    public List<Integer> numOfIslands(int rows, int cols, int[][] operators) {
+        Disjoint ds = new Disjoint(rows*cols);
+        List<Integer> ans = new ArrayList<>();
+        int[][] vis = new int[rows][cols];
+        for(int[] x: vis) {
+            Arrays.fill(x,0);
+        }
+        
+        int islands = 0;
+        
+        for(int[] x: operators) {
+            int r = x[0];
+            int c = x[1];
+            
+            if(vis[r][c]==1) { //already visited
+                ans.add(islands);
+                continue;
+            }
+            else{
+                vis[r][c] = 1;
+                ++islands;
+                
+                //see in all 4 directions
+                int[] dr = {-1,0,1,0};
+                int[] dc = {0,-1,0,1};
+                for(int i=0;i<4;i++) {
+                    int newRow = r+dr[i];
+                    int newCol = c+dc[i];
+                    
+                    if(newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
+                        if(vis[newRow][newCol]==1) { //if 4 directions neighbours are 1
+                            int cellNum = r*cols+c;
+                            int adjCellNum = newRow*cols+newCol;
+                            //if ultimate parents are not same
+                            //then connect both the nodes
+                            if(ds.findParent(cellNum) != ds.findParent(adjCellNum)) {
+                                ds.join(cellNum ,adjCellNum);
+                                --islands; //when we connect, we decrement the count
+                            }
+                        }
+                    }
+                }
+            }
+            ans.add(islands);
+        }
+        return ans;
+    }
+}
+
+
+class Disjoint {
+    int n;
+    public int[] par;
+    public int[] size;
+
+    Disjoint(int n) {
+        this.n = n;
+        par = new int[n];
+        size = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            par[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    public void join(int x, int y) {
+        int parX = findParent(x);
+        int parY = findParent(y);
+
+        if (parX == parY) {
+            return;
+        }
+
+        if (size[parX] > size[parY]) {
+            par[parY] = parX;
+            size[parX] += size[parY];
+        } else {
+            par[parX] = parY;
+            size[parY] += size[parX];
+        }
+    }
+
+    public int findParent(int x) {
+        if (par[x] == x) {
+            return x;
+        }
+        return par[x] = findParent(par[x]);
+    }
+}
+
